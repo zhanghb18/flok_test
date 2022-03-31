@@ -8,22 +8,22 @@
               <el-row :gutter="0">
                 <div class="chartline">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/chartline.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId(line)"></el-image>
+                    <el-image :src="require('../assets/chartline.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=0"></el-image>
                   </el-col>
                 </div>
                 <div class="chartbar">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/chartbar.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId()"></el-image>
+                    <el-image :src="require('../assets/chartbar.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=1"></el-image>
                   </el-col>
                 </div>
                 <div class="chartcolumn">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/条形图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=1"></el-image>
+                    <el-image :src="require('../assets/条形图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=2"></el-image>
                   </el-col>
                 </div>
                 <div class="chartmix">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/柱线组合图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=1"></el-image>
+                    <el-image :src="require('../assets/柱线组合图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=3"></el-image>
                   </el-col>
                 </div>
               </el-row>
@@ -31,22 +31,22 @@
               <el-row :gutter="0">
                 <div class="chartarea">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/面积图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0"></el-image>
+                    <el-image :src="require('../assets/面积图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=4"></el-image>
                   </el-col>
                 </div>
                 <div class="chartpie">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/407饼图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=1"></el-image>
+                    <el-image :src="require('../assets/407饼图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=5"></el-image>
                   </el-col>
                 </div>
                 <div class="chartrose">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/玫瑰图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=1"></el-image>
+                    <el-image :src="require('../assets/玫瑰图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=6"></el-image>
                   </el-col>
                 </div>
                 <div class="charthorizonmix">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/纵向组合图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=1"></el-image>
+                    <el-image :src="require('../assets/纵向组合图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=7"></el-image>
                   </el-col>
                 </div>
               </el-row>
@@ -54,7 +54,7 @@
               <el-row :gutter="0">
                 <div class="chartround">
                   <el-col :span="6">
-                    <el-image :src="require('../assets/环图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0"></el-image>
+                    <el-image :src="require('../assets/环图.png')" style="width:20px;height:20px" @drag.native="drag" @dragend.native="dragend" draggable="true" @mousedown="currentChartId=8"></el-image>
                   </el-col>
                 </div>
               </el-row>
@@ -172,8 +172,210 @@ export default {
             }
           ]
         }
+      },
+      {
+        "x":0, "y":4, "w":4, "h":3,
+        i: "条形图",
+        editMode: false,
+        hasDataZoom: true, 
+        myFunctionKeys: [
+          {show: true, title: 'myChangeData', param: 'myChangeData', icon: 'path d="M17.896,12.706v-0.005v-0.003L15.855,2.507c-0.046-0.24-0.255-0.413-0.5-0.413H4.899c-0.24,0-0.447,0.166-0.498,0.4L2.106,12.696c-0.008,0.035-0.013,0.071-0.013,0.107v4.593c0,0.28,0.229,0.51,0.51,0.51h14.792c0.28,0,0.51-0.229,0.51-0.51v-4.593C17.906,12.77,17.904,12.737,17.896,12.706 M5.31,3.114h9.625l1.842,9.179h-4.481c-0.28,0-0.51,0.229-0.51,0.511c0,0.703-1.081,1.546-1.785,1.546c-0.704,0-1.785-0.843-1.785-1.546c0-0.281-0.229-0.511-0.51-0.511H3.239L5.31,3.114zM16.886,16.886H3.114v-3.572H7.25c0.235,1.021,1.658,2.032,2.75,2.032c1.092,0,2.515-1.012,2.749-2.032h4.137V16.886z"'}
+        ],
+        option:{
+          xAxis: {
+            type: 'value'
+          },
+          yAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          series: [
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'bar'
+            }
+          ]
+        }
+      },
+      {
+        "x":0, "y":4, "w":4, "h":3,
+        i: "柱线混合图",
+        editMode: false,
+        hasDataZoom: true, 
+        myFunctionKeys: [
+          {show: true, title: 'myChangeData', param: 'myChangeData', icon: 'path d="M17.896,12.706v-0.005v-0.003L15.855,2.507c-0.046-0.24-0.255-0.413-0.5-0.413H4.899c-0.24,0-0.447,0.166-0.498,0.4L2.106,12.696c-0.008,0.035-0.013,0.071-0.013,0.107v4.593c0,0.28,0.229,0.51,0.51,0.51h14.792c0.28,0,0.51-0.229,0.51-0.51v-4.593C17.906,12.77,17.904,12.737,17.896,12.706 M5.31,3.114h9.625l1.842,9.179h-4.481c-0.28,0-0.51,0.229-0.51,0.511c0,0.703-1.081,1.546-1.785,1.546c-0.704,0-1.785-0.843-1.785-1.546c0-0.281-0.229-0.511-0.51-0.511H3.239L5.31,3.114zM16.886,16.886H3.114v-3.572H7.25c0.235,1.021,1.658,2.032,2.75,2.032c1.092,0,2.515-1.012,2.749-2.032h4.137V16.886z"'}
+        ],
+        option:{
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'bar'
+            },
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line'
+            }
+          ]
+        }
+      },
+      {
+        "x":0, "y":4, "w":4, "h":3,
+        i: "面积图",
+        editMode: false,
+        myFunctionKeys: [],
+        option:{
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line',
+              areaStyle: {}
+            }
+          ]
+        }
+      },
+      {
+        "x":4, "y":23, "w":4, "h":3,
+        i: "饼图",
+        editMode: false,
+        myFunctionKeys: [],
+        option:{
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: '50%',
+              data: [
+                { value: 1048, name: 'Search Engine' },
+                { value: 735, name: 'Direct' },
+                { value: 580, name: 'Email' },
+                { value: 484, name: 'Union Ads' },
+                { value: 300, name: 'Video Ads' }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "x":0, "y":23, "w":4, "h":3,
+        i: "玫瑰图",
+        editMode: false,
+        myFunctionKeys: [],
+        option:{
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: ['20%', '70%'],
+              data: [
+                { value: 45, name: 'Search Engine' },
+                { value: 50, name: 'Direct' },
+                { value: 55, name: 'Email' },
+                { value: 65, name: 'Union Ads' },
+                { value: 70, name: 'Video Ads' }
+              ],
+              roseType: 'area',
+              itemStyle: {
+                borderRadius: 5
+              }
+            }
+          ]
+        }
+      },
+            {
+        "x":8, "y":16, "w":4, "h":4,
+        i: "纵向混合图",
+        editMode: false,
+        myFunctionKeys: [],
+        option:{
+          yAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          xAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'bar'
+            },
+            {
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line'
+            }
+          ]
+        }
+      },
+      {
+        "x":8, "y":23, "w":4, "h":3,
+        i: "环图",
+        editMode: false,
+        myFunctionKeys: [],
+        option:{
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: ['40%', '70%'],
+              data: [
+                { value: 1048, name: 'Search Engine' },
+                { value: 735, name: 'Direct' },
+                { value: 580, name: 'Email' },
+                { value: 484, name: 'Union Ads' },
+                { value: 300, name: 'Video Ads' }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        }
       }
       ],
+      dataToChart:[],
       currentChartId:0,
       layout: [],
       chartW:4,
@@ -278,9 +480,6 @@ export default {
             } catch {
             }
         }
-    },
-    currentChartId(id){
-
     },
   }
 };
