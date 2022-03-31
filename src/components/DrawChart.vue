@@ -61,6 +61,60 @@
 
             </el-submenu>
           </el-menu>
+        <el-menu id="data_menu" shadow="never" v-show="true" >
+          <el-submenu index = '1'>
+          <template slot="title">参数区</template>
+          <div class="select_title">x轴</div>
+          <el-select v-model="x_axis_Id">
+
+            <el-option
+              v-for="(item,index) in this.x_axis_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+
+          <div class="select_title">y轴</div>
+          <el-select v-model="y_axis_Id">
+            <el-option
+              v-for="(item,index) in this.y_axis_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+
+        <div class="select_title">聚集函数</div>
+          <el-select v-model="a_functions">
+            <el-option
+              v-for="(item,index) in this.a_functions_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+
+        <div class="select_title">排序字段</div>
+          <el-select v-model="data_sort">
+            <el-option
+              v-for="(item,index) in this.data_sort_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+
+        <div class="select_title">排序方向</div>
+         <el-select v-model="data_sort_dir">
+            <el-option
+              v-for="(item,index) in this.data_sort_dir_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+          </el-submenu>
+        </el-menu>
           <!-- <el-button @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0">
               图1
           </el-button>
@@ -123,6 +177,76 @@ export default {
   },
   data() {
     return {
+      x_axis_Id :"",
+      y_axis_Id :"",
+      a_functions :"",
+      data_sort :"",
+      x_axis_Info: [
+        {
+          id: 1,
+          name: "x轴1",
+        },
+        {
+          id: 2,
+          name: "x轴2",
+        },
+      ],
+      y_axis_Info: [
+        {
+          id: 1,
+          name: "y轴1",
+        },
+        {
+          id: 2,
+          name: "y轴2",
+        },
+      ],
+      a_functions_Info: [
+        {
+          id: 1,
+          name: "最大",
+        },
+        {
+          id: 2,
+          name: "最小",
+        },
+          {
+          id: 3,
+          name: "平均",
+        },
+          {
+          id: 4,
+          name: "求和",
+        },
+          {
+          id: 5,
+          name: "方差",
+        },
+          {
+          id: 6,
+          name: "标准差",
+        },
+      ],
+      data_sort_Info: [
+        {
+          id: 1,
+          name: "数据1",
+        },
+        {
+          id: 2,
+          name: "数据2",
+        },
+      ],
+      data_sort_dir_Info: [
+        {
+          id: 1,
+          name: "从大到小",
+        },
+        {
+          id: 2,
+          name: "从小到大",
+        },
+      ],
       dataFromServer:[
       {
         "x":0, "y":0, "w":4, "h":3,
@@ -508,6 +632,13 @@ export default {
   }
   .el-menu {
     background-color:#86bcf3;
+  }
+  .el-select{
+    margin-bottom: 3px;
+    margin-top: 5px;
+  }
+  .select_title {
+    font-size: 14px;
   }
   .el-submenu::v-deep .el-submenu__title {
     height: 30px;
