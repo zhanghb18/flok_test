@@ -48,6 +48,16 @@ export default {
     //必须加上setTimeout，否则图像无法加载
     setTimeout(this.onMounted,0);
   },
+  watch: {
+    echartOption:{
+      deep: true,
+      immediate:false,
+      handler(newval,oldval){
+        console.log("新值："+newval,"旧值："+ oldval);
+        this.onMounted();
+      }
+    }
+  },
   destroyed(){
     this.onDestroyed()
   },

@@ -65,7 +65,7 @@
           <el-submenu index = '1'>
           <template slot="title">参数区</template>
           <div class="select_title">x轴</div>
-          <el-select v-model="x_axis_Id">
+          <el-select v-model="x_axis_Id" @change="getX">
 
             <el-option
               v-for="(item,index) in this.x_axis_Info"
@@ -208,6 +208,7 @@
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
+                @click.native = "getId(item.i)"
               ></component>
           </grid-item>
           </grid-layout>
@@ -232,10 +233,11 @@ export default {
   components: {
     GridLayout,
     GridItem,
-    EChartComponent,
+    EChartComponent
   },
   data() {
     return {
+      currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
@@ -689,6 +691,7 @@ export default {
             item.w = this.chartW;
             item.h = this.chartH;
             item.i = DragPos.i;
+            //item.i = this.currentChartId;
             this.layout.push(item);
             this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x,DragPos.y,1,1);
             try {
@@ -697,6 +700,26 @@ export default {
             }
         }
     },
+    getId: function(e) {
+      console.log(e);
+      this.currentId = e;
+    },
+    getX: function(e) {
+      console.log(e);
+      if (e == "x轴1") {
+        console.log("1");
+        console.log(this.layout);
+        this.layout[this.currentId].option.xAxis.data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        this.$forceUpdate();
+      }
+      if (e == "x轴2") {
+        console.log("2");
+        //this.$set(this.layout[this.currentId].option.xAxis,data,['1','2','3','4','5','6','7']);
+        this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
+        console.log(this.layout);
+        this.$forceUpdate();
+      }
+    }
   }
 };
 
