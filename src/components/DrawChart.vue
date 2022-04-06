@@ -115,6 +115,64 @@
           </el-select>
           </el-submenu>
         </el-menu>
+
+
+        <el-menu id="data_menu2" shadow="never" v-show="true" >
+          <el-submenu index = '1'>
+          <template slot="title">参数区</template>
+          <div class="select_title">URL:{{pic_url}}</div>
+          </el-submenu>
+        </el-menu>
+
+
+        <el-menu id="data_menu3" shadow="never" v-show="true" >
+          <el-submenu index = '1'>
+          <template slot="title">参数区</template>
+          <div class="select_title">画布类型</div>
+          <el-select v-model="canvas_type">
+
+            <el-option
+              v-for="(item,index) in this.canvas_type_data"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+            <div>
+              <div v-if="canvas_type == '默认'">
+                <div class="select_title">宽度</div>
+                <el-input type="value" v-model.number="num1"></el-input>
+                <div class="select_title">高度</div>
+                <el-input type="value" v-model.number="num2"></el-input>
+              </div>
+
+              <div v-if="canvas_type == '纸张'">
+                <div class="select_title">纸张类型</div>
+                <el-select v-model="paper_type">
+                  <el-option
+                      v-for="(item,index) in this.paper_type_data"
+                      :value="item.name"
+                      :key="index"
+                  ></el-option>
+                </el-select>
+              </div>
+            </div>
+
+          <div class="select_title">图标主题</div>
+          <el-select v-model="y_axis_Id">
+            <el-option
+              v-for="(item,index) in this.y_axis_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
+
+
+        <div class="select_title">看板定时刷新</div>
+          <el-button @click="dialog = true">选项</el-button>
+            <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
+          </el-submenu>
+        </el-menu>
           <!-- <el-button @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0">
               图1
           </el-button>
@@ -156,6 +214,7 @@
         </div>
       </el-main>
     </el-container>
+    <el-dialog :visible.sync="dialog"></el-dialog>
   </div>
 </template>
 
@@ -173,14 +232,44 @@ export default {
   components: {
     GridLayout,
     GridItem,
-    EChartComponent
+    EChartComponent,
   },
   data() {
     return {
+      dialog:"false",
+      pic_url:"www.baidu.com",
+      canvas_type:"",
+      paper_type:"",
+      num1:0,
+      num2:0,
       x_axis_Id :"",
       y_axis_Id :"",
       a_functions :"",
       data_sort :"",
+      canvas_type_data: [
+        {
+          id: 1,
+          name: "默认",
+        },
+        {
+          id: 2,
+          name: "纸张",
+        },
+      ],
+      paper_type_data: [
+        {
+          id: 1,
+          name: "A3",
+        },
+        {
+          id: 2,
+          name: "A4",
+        },
+        {
+          id: 3,
+          name: "A5",
+        },
+      ],
       x_axis_Info: [
         {
           id: 1,
@@ -509,6 +598,9 @@ export default {
       responsive: true,
       vueGridLayoutDivWidth: 0,
     };
+  },
+  created() {
+    this.dialog = false
   },
   mounted(){
     //获取drag时的鼠标坐标
