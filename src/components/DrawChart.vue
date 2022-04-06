@@ -61,10 +61,11 @@
 
             </el-submenu>
           </el-menu>
-        <el-menu id="data_menu" shadow="never" v-show="true" >
+        <el-menu id="data_menu" shadow="never" v-show="true" v-if="currentchart == 0 && currentChartId != -1">
           <el-submenu index = '1'>
           <template slot="title">参数区</template>
-          <div class="select_title">x轴</div>
+            <div v-if="currentId == 0 || currentId == 1 || currentId == 2 || currentId == 3 || currentId == 4 || currentId == 7">
+          <div class="select_title" >x轴</div>
           <el-select v-model="x_axis_Id" @change="getX">
 
             <el-option
@@ -74,7 +75,6 @@
             ></el-option>
           </el-select>
 
-
           <div class="select_title">y轴</div>
           <el-select v-model="y_axis_Id">
             <el-option
@@ -83,6 +83,7 @@
               :key="index"
             ></el-option>
           </el-select>
+              </div>
 
 
         <div class="select_title">聚集函数</div>
@@ -117,7 +118,7 @@
         </el-menu>
 
 
-        <el-menu id="data_menu2" shadow="never" v-show="true" >
+        <el-menu id="data_menu2" shadow="never" v-show="true" v-else-if="currentchart == 1 && currentChartId != -1">
           <el-submenu index = '1'>
           <template slot="title">参数区</template>
           <div class="select_title">URL:{{pic_url}}</div>
@@ -125,7 +126,7 @@
         </el-menu>
 
 
-        <el-menu id="data_menu3" shadow="never" v-show="true" >
+        <el-menu id="data_menu3" shadow="never" v-show="true" v-else-if="currentchart == 2">
           <el-submenu index = '1'>
           <template slot="title">参数区</template>
           <div class="select_title">画布类型</div>
@@ -180,8 +181,8 @@
               图2
           </el-button> -->
       </el-aside>
-      <el-main>
-        <div id="dashboard">
+      <el-main >
+        <div id="dashboard" @mousedown="currentchart = 2">
           <grid-layout  ref="gridlayout" :layout.sync="layout"
             :col-num="12"
             :row-height="100"
@@ -237,6 +238,7 @@ export default {
   },
   data() {
     return {
+      currentchart : 0,
       currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
@@ -591,7 +593,7 @@ export default {
       }
       ],
       dataToChart:[],
-      currentChartId:0,
+      currentChartId: -1,
       layout: [],
       chartW:4,
       chartH:3,
@@ -636,6 +638,8 @@ export default {
   },
   methods:{
     drag: function (e) {
+        this.currentId = this.currentChartId
+        this.currentchart = 0
         let parentRect = document.getElementById('dashboard').getBoundingClientRect();
         let mouseInGrid = false;
         if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -691,7 +695,7 @@ export default {
             item.w = this.chartW;
             item.h = this.chartH;
             item.i = DragPos.i;
-            //item.i = this.currentChartId;
+            item.i = this.currentChartId;
             this.layout.push(item);
             this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x,DragPos.y,1,1);
             try {
@@ -703,6 +707,7 @@ export default {
     getId: function(e) {
       console.log(e);
       this.currentId = e;
+      this.currentchart = 0;
     },
     getX: function(e) {
       console.log(e);
