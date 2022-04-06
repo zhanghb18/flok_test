@@ -76,7 +76,7 @@
 
 
           <div class="select_title">y轴</div>
-          <el-select v-model="y_axis_Id">
+          <el-select v-model="y_axis_Id" @change="getY">
             <el-option
               v-for="(item,index) in this.y_axis_Info"
               :value="item.name"
@@ -208,7 +208,7 @@
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
-                @click.native = "getId(item.i)"
+                @click.native = "getId(item)"
               ></component>
           </grid-item>
           </grid-layout>
@@ -237,7 +237,9 @@ export default {
   },
   data() {
     return {
-      currentId :0,
+      currentId:0,
+      currentType:0,
+      IdMap:{},
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
@@ -685,14 +687,20 @@ export default {
             this.layout = this.layout.filter(obj => obj.i !== 'drop');
             // UNCOMMENT below if you want to add a grid-item
             console.log(this.currentChartId);
-            let item=this.dataFromServer[this.currentChartId];
+            //let item=Object.assign({},this.dataFromServer[this.currentChartId]);
+            let item = JSON.parse(JSON.stringify(this.dataFromServer[this.currentChartId]));
             item.x = DragPos.x;
             item.y = DragPos.y;
             item.w = this.chartW;
             item.h = this.chartH;
             item.i = DragPos.i;
+            item.type = this.currentChartId;
+            item.x_name = "x轴1";
+            item.y_name = "y轴1";
             //item.i = this.currentChartId;
+            //this.layout[this.currentChartId] = item;
             this.layout.push(item);
+            console.log(this.layout);
             this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x,DragPos.y,1,1);
             try {
                 this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display="block";
@@ -702,7 +710,8 @@ export default {
     },
     getId: function(e) {
       console.log(e);
-      this.currentId = e;
+      this.currentId = e.i;
+      this.currentType = e.type;
     },
     getX: function(e) {
       console.log(e);
@@ -716,7 +725,21 @@ export default {
         console.log("2");
         //this.$set(this.layout[this.currentId].option.xAxis,data,['1','2','3','4','5','6','7']);
         this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
+        this.layout[this.currentId].x_name = "x轴2";
         console.log(this.layout);
+        this.$forceUpdate();
+      }
+    },
+    getY: function(e) {
+      console.log(e);
+      if (e == "y轴1") {
+        this.layout[this.currentId].option.series[0].data = [150, 230, 224, 218, 135, 147, 260];
+        this.layout[this.currentId].y_name = "y轴1";
+        this.$forceUpdate();
+      }
+      if (e == "y轴2") {
+        this.layout[this.currentId].option.series[0].data = [50, 20, 30, 10, 25, 70, 90];
+        this.layout[this.currentId].y_name = "y轴2";
         this.$forceUpdate();
       }
     }
