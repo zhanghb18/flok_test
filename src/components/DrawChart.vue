@@ -62,9 +62,9 @@
             </el-submenu>
           </el-menu>
         <el-menu id="data_menu" shadow="never" v-show="true" v-if="currentchart == 0 && currentChartId != -1">
-          <el-submenu index = '1'>
+          <el-submenu index="1">
           <template slot="title">参数区</template>
-            <div v-if="currentType == 0 || currentType == 1 || currentType == 2 || currentType == 3 || currentType == 4 || currentType == 7">
+        <div v-if="currentChartId == 0 || currentChartId == 1 || currentChartId == 2 || currentChartId == 3 || currentChartId == 4 || currentChartId == 7">
           <div class="select_title" >x轴</div>
           <el-select v-model="x_axis_Id" @change="getX">
 
@@ -83,7 +83,7 @@
               :key="index"
             ></el-option>
           </el-select>
-              </div>
+
 
 
         <div class="select_title">聚集函数</div>
@@ -114,7 +114,20 @@
               :key="index"
             ></el-option>
           </el-select>
-          </el-submenu>
+
+          </div>
+          <div v-else>
+            <div class="select_title">数据</div>
+            <el-select v-model="data_Id" @change="get_data">
+              <el-option
+                v-for="(item,index) in this.data_Info"
+                :value="item.name"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </div>
+            </el-submenu>
+
         </el-menu>
 
 
@@ -174,12 +187,7 @@
             <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
           </el-submenu>
         </el-menu>
-          <!-- <el-button @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0">
-              图1
-          </el-button>
-          <el-button @drag.native="drag" @dragend.native="dragend" draggable="true"  @click="currentChartId=1">
-              图2
-          </el-button> -->
+
       </el-aside>
       <el-main >
         <div id="dashboard" @mouseup="currentchart = 2">
@@ -239,7 +247,6 @@ export default {
   },
   data() {
     return {
-      typeActive:false,
       currentId:0,
       currentType:0,
       currentchart : 0,
@@ -254,8 +261,6 @@ export default {
       y_axis_Id :"",
       a_functions :"",
       data_sort :"",
-      data_sort_dir:"",
-      data_model_theme:"",
       canvas_type_data: [
         {
           id: 1,
@@ -795,7 +800,7 @@ export default {
     getId: function(e,index) {
       //console.log(e);
       this.currentId = e.i;
-      this.currentType = e.type;
+      this.currentChartId = e.type;
       this.currentchart = 0;
       this.x_axis_Id = e.x_name;
       this.y_axis_Id = e.y_name;
@@ -837,15 +842,26 @@ export default {
         this.$forceUpdate();
       }
     },
-    std_fc: function(arr){					
+    get_data: function(e) {
+      console.log(e);
+      if (e == "数据1") {
+        //todo
+        this.$forceUpdate();
+      }
+      if (e == "数据2") {
+        //todo
+        this.$forceUpdate();
+      }
+    },
+    std_fc: function(arr){
       var sum=0;
       var s=0;
       for(var i=0;i<arr.length;i++){
-          sum+=arr[i]             
+          sum+=arr[i]
       }
-      var ave=sum/arr.length;			
+      var ave=sum/arr.length;
       for(var j=0;j<arr.length;j++){
-          s+=Math.pow((ave-arr[j]),2);   
+          s+=Math.pow((ave-arr[j]),2);
       }
       return Math.sqrt((s/arr.length),2);
     },
@@ -853,11 +869,11 @@ export default {
       var sum=0;
       var s=0;
       for(var i=0;i<arr.length;i++){
-          sum+=arr[i]             
+          sum+=arr[i]
       }
-      var ave=sum/arr.length;			
+      var ave=sum/arr.length;
       for(var j=0;j<arr.length;j++){
-          s+=Math.pow((ave-arr[j]),2);   
+          s+=Math.pow((ave-arr[j]),2);
       }
       return (s/arr.length);
     },
