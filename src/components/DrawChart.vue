@@ -184,11 +184,12 @@
             </div>
 
           <div class="select_title">图表主题</div>
-          <el-select v-model="data_model_theme">
+          <el-select v-model="data_model_theme" @change="changeTypeStyle">
             <el-option
               v-for="(item,index) in this.data_model_theme_Info"
               :value="item.name"
               :key="index"
+              @click.native = "changeTypeStyle"
             ></el-option>
           </el-select>
 
@@ -225,11 +226,13 @@
               :minH="1"
               :class="{active:index==typeActive}"
             >
-              <component 
+              <component
+                  class="e-charts-light"
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
                 @click.native = "getId(item,index)"
+
               ></component>
           </grid-item>
           </grid-layout>
@@ -258,6 +261,8 @@ export default {
   },
   data() {
     return {
+      styles : ['e-charts-light', 'e-charts-dark'],
+      styleId : 0,
       currentId:0,
       currentType:0,
       currentchart : 0,
@@ -385,11 +390,24 @@ export default {
         option:{
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           yAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
+
           tooltip:{},
           series: [
             {
@@ -410,10 +428,22 @@ export default {
         option:{
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           yAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           series: [
             {
@@ -433,11 +463,23 @@ export default {
         ],
         option:{
           xAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           yAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           series: [
             {
@@ -458,10 +500,22 @@ export default {
         option:{
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           yAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           series: [
             {
@@ -483,10 +537,22 @@ export default {
         option:{
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           yAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           series: [
             {
@@ -508,7 +574,10 @@ export default {
           },
           legend: {
             orient: 'vertical',
-            left: 'left'
+            left: 'left',
+            textStyle:{
+                color:"#222222"
+            }
           },
           series: [
             {
@@ -543,7 +612,10 @@ export default {
           },
           legend: {
             orient: 'vertical',
-            left: 'left'
+            left: 'left',
+            textStyle:{
+                color:"#222222"
+            }
           },
           series: [
             {
@@ -572,10 +644,22 @@ export default {
         option:{
           yAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           xAxis: {
-            type: 'value'
+            type: 'value',
+            axisLabel:{//修改坐标系字体颜色
+              show:true,
+              textStyle:{
+                color:"#222222"
+              }
+            },
           },
           series: [
             {
@@ -600,7 +684,10 @@ export default {
           },
           legend: {
             orient: 'vertical',
-            left: 'left'
+            left: 'left',
+            textStyle: {
+              color: "#222222"
+            }
           },
           series: [
             {
@@ -676,6 +763,7 @@ export default {
       resizable: true,
       responsive: true,
       vueGridLayoutDivWidth: 0,
+      font_color: '#222222'
     };
   },
   created() {
@@ -798,6 +886,7 @@ export default {
             item.type = this.currentChartId;
             item.x_name = "x轴1";
             item.y_name = "y轴1";
+
             //item.i = this.currentChartId;
             //this.layout[this.currentChartId] = item;
             this.layout.push(item);
@@ -961,13 +1050,37 @@ export default {
         }
       }
     },
+    changefont:function(a,b) {
+      if(this.layout[a].type == 5 || this.layout[a].type == 6 || this.layout[a].type == 8){
+        this.layout[a].option.legend.textStyle.color = b
+      }
+      else{
+        this.layout[a].option.xAxis.axisLabel.textStyle.color = b
+        this.layout[a].option.yAxis.axisLabel.textStyle.color = b
+      }
+      //     this.$forceUpdate();
+    },
     changeTypeStyle:function(e) {
       console.log("点击样式：");
-      if(e == "浅色模式"){
-        this.typeActive=1;
+      if(this.data_model_theme == "浅色模式"){
+        Array.from(document.querySelectorAll('.' + this.styles[1])).forEach((el) => {
+          const style = this.styles[1]
+          el.classList.replace(style, this.styles[0])
+      })
+        this.font_color='#222222'
+        for(var i = 0; i < this.layout.length; i++){
+            this.changefont(i,this.font_color)
+        }
       }
-      else if(e == "深色模式"){
-        this.typeActive=2;
+      else if(this.data_model_theme == "深色模式"){
+        Array.from(document.querySelectorAll('.' + this.styles[0])).forEach((el) => {
+          const style = this.styles[0]
+          el.classList.replace(style, this.styles[1])
+      })
+        this.font_color='#FFFFFF'
+        for(var j = 0; j < this.layout.length; j++){
+          this.changefont(j,this.font_color)
+        }
       }
       console.log(this.typeActive);
     },
@@ -1022,5 +1135,11 @@ export default {
     text-align: center;
     line-height: 160px;
     height: auto;
+  }
+  .e-charts-dark{
+    background-color: #777777;
+  }
+  .e-charts-light{
+    background-color: #FFFFFF;
   }
 </style>
