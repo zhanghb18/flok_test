@@ -87,7 +87,7 @@
 
 
         <div class="select_title">聚集函数</div>
-          <el-select v-model="a_functions">
+          <el-select v-model="a_functions" @change="getFunction">
             <el-option
               v-for="(item,index) in this.a_functions_Info"
               :value="item.name"
@@ -107,7 +107,7 @@
 
 
         <div class="select_title">排序方向</div>
-         <el-select v-model="data_sort_dir">
+         <el-select v-model="data_sort_dir" @change="getsort">
             <el-option
               v-for="(item,index) in this.data_sort_dir_Info"
               :value="item.name"
@@ -172,10 +172,10 @@
               </div>
             </div>
 
-          <div class="select_title">图标主题</div>
-          <el-select v-model="y_axis_Id">
+          <div class="select_title">图表主题</div>
+          <el-select v-model="data_model_theme">
             <el-option
-              v-for="(item,index) in this.y_axis_Info"
+              v-for="(item,index) in this.data_model_theme_Info"
               :value="item.name"
               :key="index"
             ></el-option>
@@ -190,7 +190,7 @@
 
       </el-aside>
       <el-main >
-        <div id="dashboard" @mousedown="currentchart = 2">
+        <div id="dashboard" @mouseup="currentchart = 2">
           <grid-layout  ref="gridlayout" :layout.sync="layout"
             :col-num="12"
             :row-height="100"
@@ -202,7 +202,7 @@
             style="height:800px"
           >
             <grid-item
-              v-for="item in layout"
+              v-for="(item,index) in layout"
               :key="`Box${item.i}`"
               :static="item.static"
               :x="item.x"
@@ -212,12 +212,13 @@
               :i="item.i"
               :minW="1"
               :minH="1"
+              :class="{active:index==typeActive}"
             >
               <component 
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
-                @click.native = "getId(item)"
+                @click.native = "getId(item,index)"
               ></component>
           </grid-item>
           </grid-layout>
@@ -249,6 +250,7 @@ export default {
       currentId:0,
       currentType:0,
       currentchart : 0,
+      currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
@@ -257,7 +259,6 @@ export default {
       num2:0,
       x_axis_Id :"",
       y_axis_Id :"",
-      data_Id :"",
       a_functions :"",
       data_sort :"",
       canvas_type_data: [
@@ -302,16 +303,6 @@ export default {
         {
           id: 2,
           name: "y轴2",
-        },
-      ],
-      data_Info: [
-        {
-          id: 1,
-          name: "数据1",
-        },
-        {
-          id: 2,
-          name: "数据2",
         },
       ],
       a_functions_Info: [
@@ -360,10 +351,20 @@ export default {
           name: "从小到大",
         },
       ],
-      dataFromServer:[
+      data_model_theme_Info: [
+        {
+          id: 1,
+          name: "深色模式",
+        },
+        {
+          id: 2,
+          name: "浅色模式",
+        },
+      ],
+      dataOfEcharts:[
       {
         "x":0, "y":0, "w":4, "h":3,
-        i: "A",
+        i: "折线图",
         editMode: false,
         hasDataZoom: false,
         myFunctionKeys: [
@@ -388,7 +389,7 @@ export default {
       },
       {
         "x":0, "y":4, "w":4, "h":3,
-        i: "B",
+        i: "柱形图",
         editMode: false,
         hasDataZoom: true, 
         myFunctionKeys: [
@@ -430,6 +431,10 @@ export default {
             {
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
+              type: 'bar'
             }
           ]
         }
@@ -457,6 +462,14 @@ export default {
             },
             {
               data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
+              type: 'bar'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
               type: 'line'
             }
           ]
@@ -710,7 +723,7 @@ export default {
             // UNCOMMENT below if you want to add a grid-item
             console.log(this.currentChartId);
             //let item=Object.assign({},this.dataFromServer[this.currentChartId]);
-            let item = JSON.parse(JSON.stringify(this.dataFromServer[this.currentChartId]));
+            let item = JSON.parse(JSON.stringify(this.dataOfEcharts[this.currentChartId]));
             item.x = DragPos.x;
             item.y = DragPos.y;
             item.w = this.chartW;
@@ -730,11 +743,14 @@ export default {
             }
         }
     },
-    getId: function(e) {
-      console.log(e);
+    getId: function(e,index) {
+      //console.log(e);
       this.currentId = e.i;
       this.currentChartId = e.type;
       this.currentchart = 0;
+      this.x_axis_Id = e.x_name;
+      this.y_axis_Id = e.y_name;
+      this.typeActive = index;
     },
     getX: function(e) {
       console.log(e);
@@ -761,7 +777,7 @@ export default {
         this.$forceUpdate();
       }
       if (e == "y轴2") {
-        this.layout[this.currentId].option.series[0].data = [50, 20, 30, 10, 25, 70, 90];
+        this.layout[this.currentId].option.series[0].data = [50, 300, 100, 342, 110, 150, 130];
         this.layout[this.currentId].y_name = "y轴2";
         this.$forceUpdate();
       }
@@ -776,13 +792,117 @@ export default {
         //todo
         this.$forceUpdate();
       }
-    }
+    },
+    std_fc: function(arr){
+      var sum=0;
+      var s=0;
+      for(var i=0;i<arr.length;i++){
+          sum+=arr[i]
+      }
+      var ave=sum/arr.length;
+      for(var j=0;j<arr.length;j++){
+          s+=Math.pow((ave-arr[j]),2);
+      }
+      return Math.sqrt((s/arr.length),2);
+    },
+    fc: function(arr){
+      var sum=0;
+      var s=0;
+      for(var i=0;i<arr.length;i++){
+          sum+=arr[i]
+      }
+      var ave=sum/arr.length;
+      for(var j=0;j<arr.length;j++){
+          s+=Math.pow((ave-arr[j]),2);
+      }
+      return (s/arr.length);
+    },
+    getFunction: function (e) {
+      console.log(e);
+      var data1 = [150, 230, 224, 218, 135, 147, 260];
+      var data2 = [50, 300, 100, 342, 110, 150, 130];
+      var data = [];
+      if (e == "最大") {
+        for(var i = 0; i < data1.length; i++){
+          if (data1[i] < data2[i]) data.push(data2[i]);
+          else data.push(data1[i]);
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+      if (e == "最小") {
+        for(var i = 0; i < data1.length; i++){
+          if (data1[i] < data2[i]) data.push(data1[i]);
+          else data.push(data2[i]);
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+      if (e == "平均") {
+        for(var i = 0; i < data1.length; i++){
+          data.push((data1[i]+data2[i])/2);
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+      if (e == "求和") {
+        for(var i = 0; i < data1.length; i++){
+          data.push(data1[i]+data2[i]);
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+      if (e == "方差") {
+        for(var i = 0; i < data1.length; i++){
+          var temp = [];
+          temp.push(data1[i]);
+          temp.push(data2[i]);
+          data.push(this.fc(temp));
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+      if (e == "标准差") {
+        for(var i = 0; i < data1.length; i++){
+          var temp = [];
+          temp.push(data1[i]);
+          temp.push(data2[i]);
+          data.push(this.std_fc(temp));
+        }
+        this.layout[this.currentId].option.series[0].data = data;
+      }
+    },
+    getsort: function (e) {
+      if (e == "从小到大"){
+        if (this.layout[this.currentId].y_name == "y轴1") {
+          this.layout[this.currentId].option.series[0].data = [150, 230, 224, 218, 135, 147, 260];
+          this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
+        }
+        if (this.layout[this.currentId].y_name == "y轴2") {
+          this.layout[this.currentId].option.series[0].data = [50, 300, 100, 342, 110, 150, 130];
+          this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
+        }
+      }
+      if (e == "从大到小"){
+        if (this.layout[this.currentId].y_name == "y轴1") {
+          this.layout[this.currentId].option.series[0].data = [260,147,135,218,224,230,150];
+          this.layout[this.currentId].option.xAxis.data = ['7','6','5','4','3','2','1'];
+        }
+        if (this.layout[this.currentId].y_name == "y轴2") {
+          this.layout[this.currentId].option.series[0].data = [130,150,110,342,100,300,50];
+          this.layout[this.currentId].option.xAxis.data = ['7','6','5','4','3','2','1'];
+        }
+      }
+    },
+    changeTypeStyle:function(index) {
+      console.log("点击样式：");
+      this.typeActive=index;
+      console.log(this.typeActive);
+    },
   }
 };
 
 </script>
 
 <style scoped>
+  .active {
+    border-color: red;
+  }
   .el-aside {
     background-color: #D3DCE6;
     color: #333;
