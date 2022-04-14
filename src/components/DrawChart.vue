@@ -76,17 +76,10 @@
           </el-select>
 
           <div class="select_title">y轴</div>
-          <el-select v-model="y_axis_Id" @change="getY">
-            <el-option
-              v-for="(item,index) in this.y_axis_Info"
-              :value="item.name"
-              :key="index"
-            ></el-option>
-          </el-select>
+          <el-button @click="y_axis_Id = true">选择y轴数据</el-button>
+            <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
 
-
-
-          <div v-if="y_axis_Id !='' && x_axis_Id!=''">
+          <div v-if="tvalue !='' && x_axis_Id!=''">
         <div class="select_title">聚集函数</div>
           <el-select v-model="a_functions" @change="getFunction">
             <el-option
@@ -242,6 +235,17 @@
         </div>
       </el-main>
     </el-container>
+    <el-dialog :visible.sync="y_axis_Id">
+      <el-transfer
+              class="y_transfer"
+              show-overflow-tooltip
+                filterable
+                v-model="tvalue"
+                :data="transferData"
+                :titles="['可选', '已选']"
+              @change="getY"
+              ></el-transfer>
+    </el-dialog>
     <el-dialog :visible.sync="dialog"></el-dialog>
   </div>
 </template>
@@ -277,10 +281,22 @@ export default {
       data_Id:"",
       x_axis_Id :"",
       y_axis_Id :"",
+      y_axis_show :"",
       y_axis_sort_Id:"",
       a_functions :"",
       data_sort :"",
       data_model_theme:"",
+      tvalue:[],
+      transferData:[
+        {
+          label: "y轴1",
+          key: 1
+        },
+        {
+          label: "y轴2",
+          key: 2
+        },
+      ],
       canvas_type_data: [
         {
           id: 1,
@@ -779,6 +795,8 @@ export default {
   },
   created() {
     this.dialog = false;
+    this.y_axis_Id = false;
+    this.y_axis_show = false;
     //加载数据
     var headname = this.dataFromServer.head;
     var x_axis = [];
@@ -789,6 +807,12 @@ export default {
       item["id"] = i + 1;
       item["name"] = headname[i];
       x_axis.push(item);
+      this.datatransform[headname[i]] = [];
+    }
+    for(var i = 0; i < headname.length;i++){
+      var item = {};
+      item["key"] = i + 1;
+      item["label"] = headname[i];
       y_axis.push(item);
       this.datatransform[headname[i]] = [];
     }
@@ -798,7 +822,7 @@ export default {
       }
     }
     this.x_axis_Info = x_axis;
-    this.y_axis_Info = y_axis;
+    this.transferData = y_axis;
     this.data_Info = x_axis;
     console.log("加载数据");
     console.log(this.x_axis_Info);
@@ -900,7 +924,7 @@ export default {
             item.y_name = "y轴1";
 
             item.x_name = "";
-            item.y_name = "";
+            item.y_name = [];
             item.data_name = "";
             item.function_name = "";
             //item.i = this.currentChartId;
@@ -920,7 +944,8 @@ export default {
       this.currentChartId = e.type;
       this.currentchart = 0;
       this.x_axis_Id = e.x_name;
-      this.y_axis_Id = e.y_name;
+      //todo:y轴穿梭框的数据为tvalue，需要点击新图时赋值
+      this.tvalue = e.y_name;
       this.data_Id = e.data_name;
       this.a_functions = e.function_name;
       console.log(this.data_Id);
@@ -1403,4 +1428,14 @@ export default {
   .e-charts-light{
     background-color: #FFFFFF;
   }
+  .el-transfer {
+
+    text-align: left;
+    .el-transfer__buttons {
+      display: block;
+      height: 20px;
+      line-height: 40px;
+    }
+  }
+
 </style>
