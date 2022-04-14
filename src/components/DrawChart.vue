@@ -805,14 +805,14 @@ export default {
     var data = this.dataFromServer.body;
     for(var i = 0; i < headname.length;i++){
       var item = {};
-      item["id"] = i + 1;
+      item["id"] = i;
       item["name"] = headname[i];
       x_axis.push(item);
       this.datatransform[headname[i]] = [];
     }
     for(var i = 0; i < headname.length;i++){
       var item = {};
-      item["key"] = i + 1;
+      item["key"] = i;
       item["label"] = headname[i];
       y_axis.push(item);
       this.datatransform[headname[i]] = [];
@@ -980,6 +980,8 @@ export default {
     },
     getY: function(e) {
       console.log(e);
+      console.log(this.transferData);
+      console.log(this.transferData[e[0]].label);
       if(this.layout[this.currentId].function_name != ""){
         this.layout[this.currentId].function_name = "";
         this.a_functions = "";
@@ -987,7 +989,20 @@ export default {
       }
       this.layout[this.currentId].y_name = e;
       if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
-        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        var type = this.layout[this.currentId].option.series[0].type;
+        var item = [
+          {
+            data:'',
+            type:''
+          }
+        ];
+        this.layout[this.currentId].option.series = item;
+        for(var i = 0; i < e.length; i++){
+          if(i != 0) this.layout[this.currentId].option.series.push({});
+          this.layout[this.currentId].option.series[i].data = this.datatransform[this.transferData[e[i]].label];
+          this.layout[this.currentId].option.series[i].type = type;
+        }
+        console.log(this.layout[this.currentId].option.series);
         this.$forceUpdate();
       }
       if (this.currentChartId == 2) {
@@ -1531,13 +1546,6 @@ export default {
     background-color: #FFFFFF;
   }
   .el-transfer {
-
     text-align: left;
-    .el-transfer__buttons {
-      display: block;
-      height: 20px;
-      line-height: 40px;
-    }
   }
-
 </style>
