@@ -427,10 +427,6 @@ export default {
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
             },
-            {
-              data: [100, 200, 150, 300, 500, 600, 300],
-              type: 'bar'
-            }
           ]
         }
       },
@@ -459,14 +455,6 @@ export default {
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'line'
             },
-            {
-              data: [100, 200, 150, 300, 500, 600, 300],
-              type: 'bar'
-            },
-            {
-              data: [100, 200, 150, 300, 500, 600, 300],
-              type: 'line'
-            }
           ]
         }
       },
@@ -620,6 +608,48 @@ export default {
         }
       }
       ],
+      dataFromServer:{
+        "body": [
+          [
+            "10", 
+            "20", 
+            "30", 
+            "2020-08-10T16:43:05.000+08:00", 
+            "1"
+          ], 
+          [
+            "40", 
+            "50", 
+            "60", 
+            "2020-08-10T16:43:16.000+08:00", 
+            "2"
+          ], 
+          [
+            "70", 
+            "80", 
+            "90", 
+            "2020-08-11T16:43:42.000+08:00", 
+            "3"
+          ], 
+          [
+            "100", 
+            "110", 
+            "120", 
+            "2020-08-12T16:43:46.000+08:00", 
+            "4"
+          ]
+        ], 
+        "count": 4, 
+        "head": [
+          "Time", 
+          "root.ln.wf01.wt01.status", 
+          "root.ln.wf01.wt01.temperature", 
+          "datetime", 
+          "tablenum"
+        ], 
+        "show_count": 4
+      }, 
+      datatransform:{},
       dataToChart:[],
       currentChartId: -1,
       layout: [],
@@ -632,7 +662,31 @@ export default {
     };
   },
   created() {
-    this.dialog = false
+    this.dialog = false;
+    //加载数据
+    var headname = this.dataFromServer.head;
+    var x_axis = [];
+    var y_axis = [];
+    var data = this.dataFromServer.body;
+    for(var i = 0; i < headname.length;i++){
+      var item = {};
+      item["id"] = i + 1;
+      item["name"] = headname[i];
+      x_axis.push(item);
+      y_axis.push(item);
+      this.datatransform[headname[i]] = [];
+    }
+    for(var i = 0; i < headname.length;i++){
+      for(var j = 0; j < data.length; j++){
+        this.datatransform[headname[i]].push(data[j][i]);
+      }
+    }
+    this.x_axis_Info = x_axis;
+    this.y_axis_Info = y_axis;
+    console.log("加载数据");
+    console.log(this.x_axis_Info);
+    console.log(this.y_axis_Info);
+    console.log(this.datatransform);
   },
   mounted(){
     //获取drag时的鼠标坐标
@@ -749,6 +803,7 @@ export default {
     },
     getX: function(e) {
       console.log(e);
+      console.log(this.currentType);
       if (e == "x轴1") {
         console.log("1");
         console.log(this.layout);
@@ -761,6 +816,11 @@ export default {
         this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
         this.layout[this.currentId].x_name = "x轴2";
         console.log(this.layout);
+        this.$forceUpdate();
+      }
+      if (this.currentType == 0 || this.currentType == 1){
+        this.layout[this.currentId].option.xAxis.data = this.datatransform[e];
+        this.layout[this.currentId].x_name = e;
         this.$forceUpdate();
       }
     },
