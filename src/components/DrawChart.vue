@@ -105,6 +105,17 @@
             ></el-option>
           </el-select>
 
+              <div v-if="data_sort == 'y轴'">
+                <div class="select_title">排序y轴</div>
+                <el-select v-model="y_axis_sort_Id">
+                  <el-option
+                    v-for="(item,index) in this.y_axis_Info"
+                    :value="item.name"
+                    :key="index"
+                  ></el-option>
+                </el-select>
+              </div>
+
 
         <div class="select_title">排序方向</div>
          <el-select v-model="data_sort_dir" @change="getsort">
@@ -250,7 +261,6 @@ export default {
       currentId:0,
       currentType:0,
       currentchart : 0,
-      currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
@@ -259,8 +269,10 @@ export default {
       num2:0,
       x_axis_Id :"",
       y_axis_Id :"",
+      y_axis_sort_Id:"",
       a_functions :"",
       data_sort :"",
+      data_model_theme:"",
       canvas_type_data: [
         {
           id: 1,
@@ -334,11 +346,11 @@ export default {
       data_sort_Info: [
         {
           id: 1,
-          name: "数据1",
+          name: "x轴",
         },
         {
           id: 2,
-          name: "数据2",
+          name: "y轴",
         },
       ],
       data_sort_dir_Info: [
@@ -889,9 +901,14 @@ export default {
         }
       }
     },
-    changeTypeStyle:function(index) {
+    changeTypeStyle:function(e) {
       console.log("点击样式：");
-      this.typeActive=index;
+      if(e == "浅色模式"){
+        this.typeActive=1;
+      }
+      else if(e == "深色模式"){
+        this.typeActive=2;
+      }
       console.log(this.typeActive);
     },
   }
