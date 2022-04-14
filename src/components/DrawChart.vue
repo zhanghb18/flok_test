@@ -264,7 +264,6 @@ export default {
       styles : ['e-charts-light', 'e-charts-dark'],
       styleId : 0,
       currentId:0,
-      currentType:0,
       currentchart : 0,
       dialog:"false",
       pic_url:"www.baidu.com",
@@ -272,6 +271,7 @@ export default {
       paper_type:"",
       num1:0,
       num2:0,
+      data_Id:"",
       x_axis_Id :"",
       y_axis_Id :"",
       y_axis_sort_Id:"",
@@ -322,6 +322,7 @@ export default {
           name: "y轴2",
         },
       ],
+      data_Info:[],
       a_functions_Info: [
         {
           id: 1,
@@ -741,9 +742,16 @@ export default {
             "120", 
             "2020-08-12T16:43:46.000+08:00", 
             "4"
+          ],
+          [
+            "100",
+            "120",
+            "130",
+            "2020-08-12T16:43:48.000+08:00",
+            "5"
           ]
         ], 
-        "count": 4, 
+        "count": 5,
         "head": [
           "Time", 
           "root.ln.wf01.wt01.status", 
@@ -751,7 +759,7 @@ export default {
           "datetime", 
           "tablenum"
         ], 
-        "show_count": 4
+        "show_count": 5
       }, 
       datatransform:{},
       dataToChart:[],
@@ -788,6 +796,7 @@ export default {
     }
     this.x_axis_Info = x_axis;
     this.y_axis_Info = y_axis;
+    this.data_Info = x_axis;
     console.log("加载数据");
     console.log(this.x_axis_Info);
     console.log(this.y_axis_Info);
@@ -887,6 +896,10 @@ export default {
             item.x_name = "x轴1";
             item.y_name = "y轴1";
 
+            item.x_name = "";
+            item.y_name = "";
+            item.data_name = "";
+            item.function_name = "";
             //item.i = this.currentChartId;
             //this.layout[this.currentChartId] = item;
             this.layout.push(item);
@@ -905,52 +918,79 @@ export default {
       this.currentchart = 0;
       this.x_axis_Id = e.x_name;
       this.y_axis_Id = e.y_name;
+      this.data_Id = e.data_name;
+      this.a_functions = e.function_name;
+      console.log(this.data_Id);
       this.typeActive = index;
     },
     getX: function(e) {
       console.log(e);
-      console.log(this.currentType);
-      if (e == "x轴1") {
-        console.log("1");
-        console.log(this.layout);
-        this.layout[this.currentId].option.xAxis.data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        this.$forceUpdate();
+      console.log(this.currentChartId);
+      if(this.layout[this.currentId].function_name != ""){
+        this.layout[this.currentId].function_name = "";
+        this.a_functions = "";
+        this.getY(this.layout[this.currentId].y_name);
       }
-      if (e == "x轴2") {
-        console.log("2");
-        //this.$set(this.layout[this.currentId].option.xAxis,data,['1','2','3','4','5','6','7']);
-        this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
-        this.layout[this.currentId].x_name = "x轴2";
-        console.log(this.layout);
-        this.$forceUpdate();
-      }
-      if (this.currentType == 0 || this.currentType == 1){
+      this.layout[this.currentId].x_name = e;
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
         this.layout[this.currentId].option.xAxis.data = this.datatransform[e];
-        this.layout[this.currentId].x_name = e;
         this.$forceUpdate();
       }
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.yAxis.data = this.datatransform[e];
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.xAxis.data = this.datatransform[e];
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.yAxis.data = this.datatransform[e];
+        this.$forceUpdate();
+      }
+      this.layout[this.currentId].xdata = JSON.parse(JSON.stringify(this.datatransform[e]));
     },
     getY: function(e) {
       console.log(e);
-      if (e == "y轴1") {
-        this.layout[this.currentId].option.series[0].data = [150, 230, 224, 218, 135, 147, 260];
-        this.layout[this.currentId].y_name = "y轴1";
+      if(this.layout[this.currentId].function_name != ""){
+        this.layout[this.currentId].function_name = "";
+        this.a_functions = "";
+        this.getX(this.layout[this.currentId].x_name);
+      }
+      this.layout[this.currentId].y_name = e;
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
         this.$forceUpdate();
       }
-      if (e == "y轴2") {
-        this.layout[this.currentId].option.series[0].data = [50, 300, 100, 342, 110, 150, 130];
-        this.layout[this.currentId].y_name = "y轴2";
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
         this.$forceUpdate();
       }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
+        this.$forceUpdate();
+      }
+      this.layout[this.currentId].ydata = JSON.parse(JSON.stringify(this.layout[this.currentId].option.series));
     },
     get_data: function(e) {
       console.log(e);
-      if (e == "数据1") {
-        //todo
-        this.$forceUpdate();
-      }
-      if (e == "数据2") {
-        //todo
+      if (this.currentChartId == 5 || this.currentChartId == 6 || this.currentChartId == 8) {
+        var data = [];
+        for(var i = 0; i < this.datatransform[e].length;i++){
+          var item = {};
+          item['value'] = this.datatransform[e][i];
+          item['name'] = this.datatransform[e][i];
+          data.push(item);
+        }
+        console.log(data);
+        this.layout[this.currentId].option.series[0].data = data;
+        this.layout[this.currentId].data_name = e;
         this.$forceUpdate();
       }
     },
@@ -958,7 +998,7 @@ export default {
       var sum=0;
       var s=0;
       for(var i=0;i<arr.length;i++){
-          sum+=arr[i]
+          sum+=parseInt(arr[i]);
       }
       var ave=sum/arr.length;
       for(var j=0;j<arr.length;j++){
@@ -970,7 +1010,7 @@ export default {
       var sum=0;
       var s=0;
       for(var i=0;i<arr.length;i++){
-          sum+=arr[i]
+          sum+=parseInt(arr[i]);
       }
       var ave=sum/arr.length;
       for(var j=0;j<arr.length;j++){
@@ -978,54 +1018,272 @@ export default {
       }
       return (s/arr.length);
     },
+    average:function(arr){
+      var sum=0;
+      for(var i=0;i<arr.length;i++){
+          sum+=parseInt(arr[i]);
+      }
+      var ave=sum/arr.length;
+      return ave;
+    },
+    sum:function(arr){
+      var sum=0;
+      for(var i=0;i<arr.length;i++){
+          sum+=parseInt(arr[i]);
+      }
+      return sum;
+    },
     getFunction: function (e) {
       console.log(e);
-      var data1 = [150, 230, 224, 218, 135, 147, 260];
-      var data2 = [50, 300, 100, 342, 110, 150, 130];
-      var data = [];
+      var xdata;
+      var ydata = [];
+      var x_newdata = [];
+      var y_newdata = [];
       if (e == "最大") {
-        for(var i = 0; i < data1.length; i++){
-          if (data1[i] < data2[i]) data.push(data2[i]);
-          else data.push(data1[i]);
+        this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(Math.max.apply(null,data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
       if (e == "最小") {
-        for(var i = 0; i < data1.length; i++){
-          if (data1[i] < data2[i]) data.push(data1[i]);
-          else data.push(data2[i]);
+        this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(Math.min.apply(null,data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
       if (e == "平均") {
-        for(var i = 0; i < data1.length; i++){
-          data.push((data1[i]+data2[i])/2);
+        this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(this.average(data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
       if (e == "求和") {
-        for(var i = 0; i < data1.length; i++){
-          data.push(data1[i]+data2[i]);
+                this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(this.sum(data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
       if (e == "方差") {
-        for(var i = 0; i < data1.length; i++){
-          var temp = [];
-          temp.push(data1[i]);
-          temp.push(data2[i]);
-          data.push(this.fc(temp));
+                this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(this.fc(data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
       if (e == "标准差") {
-        for(var i = 0; i < data1.length; i++){
-          var temp = [];
-          temp.push(data1[i]);
-          temp.push(data2[i]);
-          data.push(this.std_fc(temp));
+                this.layout[this.currentId].function_name = e;
+        xdata = this.layout[this.currentId].xdata;
+        var y_number = this.layout[this.currentId].ydata.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].ydata[i].data);
         }
-        this.layout[this.currentId].option.series[0].data = data;
+        console.log(xdata);
+        console.log(ydata);
+        var data = {};
+        for(var i = 0; i < xdata.length; i++){
+          data[xdata[i]] = [];
+        }
+        for(var key in data){
+          x_newdata.push(key);
+            for(var i = 0; i < y_number; i++) data[key].push([]);
+        }
+        for(var i = 0; i < xdata.length; i++){
+          for(var j = 0; j < y_number; j++) {
+            data[xdata[i]][j].push(ydata[j][i]);
+          }
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var key in data){
+            item.push(this.std_fc(data[key][i]));
+          }
+          y_newdata.push(item);
+        }
+        console.log(x_newdata);
+        console.log(y_newdata);
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
+        }
       }
     },
     getsort: function (e) {
