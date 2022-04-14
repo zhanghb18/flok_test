@@ -356,10 +356,10 @@ export default {
           name: "浅色模式",
         },
       ],
-      dataFromServer:[
+      dataOfEcharts:[
       {
         "x":0, "y":0, "w":4, "h":3,
-        i: "A",
+        i: "折线图",
         editMode: false,
         hasDataZoom: false,
         myFunctionKeys: [
@@ -384,7 +384,7 @@ export default {
       },
       {
         "x":0, "y":4, "w":4, "h":3,
-        i: "B",
+        i: "柱形图",
         editMode: false,
         hasDataZoom: true, 
         myFunctionKeys: [
@@ -426,6 +426,10 @@ export default {
             {
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
+              type: 'bar'
             }
           ]
         }
@@ -453,6 +457,14 @@ export default {
             },
             {
               data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
+              type: 'bar'
+            },
+            {
+              data: [100, 200, 150, 300, 500, 600, 300],
               type: 'line'
             }
           ]
@@ -706,7 +718,7 @@ export default {
             // UNCOMMENT below if you want to add a grid-item
             console.log(this.currentChartId);
             //let item=Object.assign({},this.dataFromServer[this.currentChartId]);
-            let item = JSON.parse(JSON.stringify(this.dataFromServer[this.currentChartId]));
+            let item = JSON.parse(JSON.stringify(this.dataOfEcharts[this.currentChartId]));
             item.x = DragPos.x;
             item.y = DragPos.y;
             item.w = this.chartW;
