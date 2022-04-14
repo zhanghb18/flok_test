@@ -86,6 +86,7 @@
 
 
 
+          <div v-if="y_axis_Id !='' && x_axis_Id!=''">
         <div class="select_title">聚集函数</div>
           <el-select v-model="a_functions" @change="getFunction">
             <el-option
@@ -116,16 +117,18 @@
                 </el-select>
               </div>
 
+          <div v-if="data_sort == 'x轴' || (data_sort == 'y轴' && y_axis_sort_Id != '')">
+          <div class="select_title">排序方向</div>
+           <el-select v-model="data_sort_dir" @change="getsort">
+              <el-option
+                v-for="(item,index) in this.data_sort_dir_Info"
+                :value="item.name"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </div>
 
-        <div class="select_title">排序方向</div>
-         <el-select v-model="data_sort_dir" @change="getsort">
-            <el-option
-              v-for="(item,index) in this.data_sort_dir_Info"
-              :value="item.name"
-              :key="index"
-            ></el-option>
-          </el-select>
-
+          </div>
           </div>
           <div v-else>
             <div class="select_title">数据</div>
