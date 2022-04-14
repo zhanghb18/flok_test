@@ -248,15 +248,14 @@ export default {
   data() {
     return {
       currentId:0,
-      currentType:0,
       currentchart : 0,
-      currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
       paper_type:"",
       num1:0,
       num2:0,
+      data_Id:"",
       x_axis_Id :"",
       y_axis_Id :"",
       a_functions :"",
@@ -305,6 +304,7 @@ export default {
           name: "y轴2",
         },
       ],
+      data_Info:[],
       a_functions_Info: [
         {
           id: 1,
@@ -688,6 +688,7 @@ export default {
     }
     this.x_axis_Info = x_axis;
     this.y_axis_Info = y_axis;
+    this.data_Info = x_axis;
     console.log("加载数据");
     console.log(this.x_axis_Info);
     console.log(this.y_axis_Info);
@@ -784,8 +785,9 @@ export default {
             item.h = this.chartH;
             item.i = DragPos.i;
             item.type = this.currentChartId;
-            item.x_name = "x轴1";
-            item.y_name = "y轴1";
+            item.x_name = "";
+            item.y_name = "";
+            item.data_name = "";
             //item.i = this.currentChartId;
             //this.layout[this.currentChartId] = item;
             this.layout.push(item);
@@ -804,52 +806,72 @@ export default {
       this.currentchart = 0;
       this.x_axis_Id = e.x_name;
       this.y_axis_Id = e.y_name;
+      this.data_Id = e.data_name;
+      console.log(this.data_Id);
       this.typeActive = index;
     },
     getX: function(e) {
       console.log(e);
-      console.log(this.currentType);
-      if (e == "x轴1") {
-        console.log("1");
-        console.log(this.layout);
-        this.layout[this.currentId].option.xAxis.data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        this.$forceUpdate();
-      }
-      if (e == "x轴2") {
-        console.log("2");
-        //this.$set(this.layout[this.currentId].option.xAxis,data,['1','2','3','4','5','6','7']);
-        this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
-        this.layout[this.currentId].x_name = "x轴2";
-        console.log(this.layout);
-        this.$forceUpdate();
-      }
-      if (this.currentType == 0 || this.currentType == 1){
+      console.log(this.currentChartId);
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
         this.layout[this.currentId].option.xAxis.data = this.datatransform[e];
+        this.layout[this.currentId].x_name = e;
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.yAxis.data = this.datatransform[e];
+        this.layout[this.currentId].x_name = e;
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.xAxis.data = this.datatransform[e];
+        this.layout[this.currentId].x_name = e;
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.yAxis.data = this.datatransform[e];
         this.layout[this.currentId].x_name = e;
         this.$forceUpdate();
       }
     },
     getY: function(e) {
       console.log(e);
-      if (e == "y轴1") {
-        this.layout[this.currentId].option.series[0].data = [150, 230, 224, 218, 135, 147, 260];
-        this.layout[this.currentId].y_name = "y轴1";
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].y_name = e;
         this.$forceUpdate();
       }
-      if (e == "y轴2") {
-        this.layout[this.currentId].option.series[0].data = [50, 300, 100, 342, 110, 150, 130];
-        this.layout[this.currentId].y_name = "y轴2";
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].y_name = e;
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
+        this.layout[this.currentId].y_name = e;
+        this.$forceUpdate();
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
+        this.layout[this.currentId].y_name = e;
         this.$forceUpdate();
       }
     },
     get_data: function(e) {
       console.log(e);
-      if (e == "数据1") {
-        //todo
-        this.$forceUpdate();
-      }
-      if (e == "数据2") {
-        //todo
+      if (this.currentChartId == 5 || this.currentChartId == 6 || this.currentChartId == 8) {
+        var data = [];
+        for(var i = 0; i < this.datatransform[e].length;i++){
+          var item = {};
+          item['value'] = this.datatransform[e][i];
+          item['name'] = this.datatransform[e][i];
+          data.push(item);
+        }
+        console.log(data);
+        this.layout[this.currentId].option.series[0].data = data;
+        this.layout[this.currentId].data_name = e;
         this.$forceUpdate();
       }
     },
