@@ -62,9 +62,9 @@
             </el-submenu>
           </el-menu>
         <el-menu id="data_menu" shadow="never" v-show="true" v-if="currentchart == 0 && currentChartId != -1">
-          <el-submenu index = '1'>
+          <el-submenu index="1">
           <template slot="title">参数区</template>
-            <div v-if="currentId == 0 || currentId == 1 || currentId == 2 || currentId == 3 || currentId == 4 || currentId == 7">
+        <div v-if="currentChartId == 0 || currentChartId == 1 || currentChartId == 2 || currentChartId == 3 || currentChartId == 4 || currentChartId == 7">
           <div class="select_title" >x轴</div>
           <el-select v-model="x_axis_Id" @change="getX">
 
@@ -83,7 +83,7 @@
               :key="index"
             ></el-option>
           </el-select>
-              </div>
+
 
 
         <div class="select_title">聚集函数</div>
@@ -114,7 +114,20 @@
               :key="index"
             ></el-option>
           </el-select>
-          </el-submenu>
+
+          </div>
+          <div v-else>
+            <div class="select_title">数据</div>
+            <el-select v-model="data_Id" @change="get_data">
+              <el-option
+                v-for="(item,index) in this.data_Info"
+                :value="item.name"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </div>
+            </el-submenu>
+
         </el-menu>
 
 
@@ -174,12 +187,7 @@
             <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
           </el-submenu>
         </el-menu>
-          <!-- <el-button @drag.native="drag" @dragend.native="dragend" draggable="true" @click="currentChartId=0">
-              图1
-          </el-button>
-          <el-button @drag.native="drag" @dragend.native="dragend" draggable="true"  @click="currentChartId=1">
-              图2
-          </el-button> -->
+
       </el-aside>
       <el-main >
         <div id="dashboard" @mousedown="currentchart = 2">
@@ -241,7 +249,6 @@ export default {
       currentId:0,
       currentType:0,
       currentchart : 0,
-      currentId :0,
       dialog:"false",
       pic_url:"www.baidu.com",
       canvas_type:"",
@@ -250,6 +257,7 @@ export default {
       num2:0,
       x_axis_Id :"",
       y_axis_Id :"",
+      data_Id :"",
       a_functions :"",
       data_sort :"",
       canvas_type_data: [
@@ -294,6 +302,16 @@ export default {
         {
           id: 2,
           name: "y轴2",
+        },
+      ],
+      data_Info: [
+        {
+          id: 1,
+          name: "数据1",
+        },
+        {
+          id: 2,
+          name: "数据2",
         },
       ],
       a_functions_Info: [
@@ -715,7 +733,7 @@ export default {
     getId: function(e) {
       console.log(e);
       this.currentId = e.i;
-      this.currentType = e.type;
+      this.currentChartId = e.type;
       this.currentchart = 0;
     },
     getX: function(e) {
@@ -745,6 +763,17 @@ export default {
       if (e == "y轴2") {
         this.layout[this.currentId].option.series[0].data = [50, 20, 30, 10, 25, 70, 90];
         this.layout[this.currentId].y_name = "y轴2";
+        this.$forceUpdate();
+      }
+    },
+    get_data: function(e) {
+      console.log(e);
+      if (e == "数据1") {
+        //todo
+        this.$forceUpdate();
+      }
+      if (e == "数据2") {
+        //todo
         this.$forceUpdate();
       }
     }
