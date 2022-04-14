@@ -1548,4 +1548,8 @@ export default {
   .el-transfer {
     text-align: left;
   }
+  .el-button {
+    margin-top:5px;
+    width: 100%;
+  }
 </style>
