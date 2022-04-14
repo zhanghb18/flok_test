@@ -280,6 +280,7 @@ export default {
       y_axis_sort_Id:"",
       a_functions :"",
       data_sort :"",
+      data_sort_dir:"",
       data_model_theme:"",
       canvas_type_data: [
         {
@@ -896,13 +897,11 @@ export default {
             item.h = this.chartH;
             item.i = DragPos.i;
             item.type = this.currentChartId;
-            item.x_name = "x轴1";
-            item.y_name = "y轴1";
-
             item.x_name = "";
             item.y_name = "";
             item.data_name = "";
             item.function_name = "";
+            item.data_sort_name = "";
             //item.i = this.currentChartId;
             //this.layout[this.currentChartId] = item;
             this.layout.push(item);
@@ -923,6 +922,7 @@ export default {
       this.y_axis_Id = e.y_name;
       this.data_Id = e.data_name;
       this.a_functions = e.function_name;
+      this.data_sort_dir = e.data_sort_name;
       console.log(this.data_Id);
       this.typeActive = index;
     },
@@ -1042,6 +1042,9 @@ export default {
       var ydata = [];
       var x_newdata = [];
       var y_newdata = [];
+      this.data_sort = '';
+      this.data_sort_dir = '';
+      this.y_axis_sort_Id = '';
       if (e == "最大") {
         this.layout[this.currentId].function_name = e;
         xdata = this.layout[this.currentId].xdata;
@@ -1290,24 +1293,123 @@ export default {
       }
     },
     getsort: function (e) {
+      this.layout[this.currentId].data_sort_name = e;
       if (e == "从小到大"){
-        if (this.layout[this.currentId].y_name == "y轴1") {
-          this.layout[this.currentId].option.series[0].data = [150, 230, 224, 218, 135, 147, 260];
-          this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
-        }
-        if (this.layout[this.currentId].y_name == "y轴2") {
-          this.layout[this.currentId].option.series[0].data = [50, 300, 100, 342, 110, 150, 130];
-          this.layout[this.currentId].option.xAxis.data = ['1','2','3','4','5','6','7'];
+        if(this.data_sort == 'x轴'){
+          var xdata;
+          var ydata = [];
+          var x_newdata = [];
+          var y_newdata = [];
+          if(this.currentChartId == 2 || this.currentChartId == 7){
+            xdata = this.layout[this.currentId].option.yAxis.data;
+          }
+          else{
+            xdata = this.layout[this.currentId].option.xAxis.data;
+          }
+          var y_number = this.layout[this.currentId].option.series.length;
+          for(var i = 0; i < y_number; i++){
+            ydata.push(this.layout[this.currentId].option.series[i].data);
+          }
+          var list = [];
+          for(var i = 0; i < xdata.length; i++){
+            var item = {};
+            item['x'] = xdata[i];
+            for(var j = 0; j < y_number;j++){
+              item[j] = ydata[j][i];
+            }
+            list.push(item);
+          }
+          // 排序方法
+          function compare(property) {//property:根据什么属性排序
+            return function(a,b){
+              var value1 = a[property];
+              var value2 = b[property];
+              /*
+              * value2 - value1; ——> 降序
+              * value1 - value2; ——> 升序
+              */
+              return value1 - value2;//升序排序
+            }
+          }
+          list.sort(compare('x'));
+          for(var i = 0; i < list.length;i++){
+            x_newdata.push(list[i]['x']);
+          }
+          for(var i = 0; i < y_number; i++){
+            var item = [];
+            for(var j = 0; j < list.length;j++){
+              item.push(list[j][i]);
+            }
+            y_newdata.push(item);
+          }
+          for(var i = 0; i < y_number; i++){
+            this.layout[this.currentId].option.series[i].data = y_newdata[i];
+          }
+          if(this.currentChartId == 2 || this.currentChartId == 7){
+            this.layout[this.currentId].option.yAxis.data = x_newdata;
+          }
+          else{
+            this.layout[this.currentId].option.xAxis.data = x_newdata;
+          }
         }
       }
       if (e == "从大到小"){
-        if (this.layout[this.currentId].y_name == "y轴1") {
-          this.layout[this.currentId].option.series[0].data = [260,147,135,218,224,230,150];
-          this.layout[this.currentId].option.xAxis.data = ['7','6','5','4','3','2','1'];
-        }
-        if (this.layout[this.currentId].y_name == "y轴2") {
-          this.layout[this.currentId].option.series[0].data = [130,150,110,342,100,300,50];
-          this.layout[this.currentId].option.xAxis.data = ['7','6','5','4','3','2','1'];
+        if(this.data_sort == 'x轴'){
+          var xdata;
+          var ydata = [];
+          var x_newdata = [];
+          var y_newdata = [];
+          if(this.currentChartId == 2 || this.currentChartId == 7){
+            xdata = this.layout[this.currentId].option.yAxis.data;
+          }
+          else{
+            xdata = this.layout[this.currentId].option.xAxis.data;
+          }
+          var y_number = this.layout[this.currentId].option.series.length;
+          for(var i = 0; i < y_number; i++){
+            ydata.push(this.layout[this.currentId].option.series[i].data);
+          }
+          var list = [];
+          for(var i = 0; i < xdata.length; i++){
+            var item = {};
+            item['x'] = xdata[i];
+            for(var j = 0; j < y_number;j++){
+              item[j] = ydata[j][i];
+            }
+            list.push(item);
+          }
+          // 排序方法
+          function compare(property) {//property:根据什么属性排序
+            return function(a,b){
+              var value1 = a[property];
+              var value2 = b[property];
+              /*
+              * value2 - value1; ——> 降序
+              * value1 - value2; ——> 升序
+              */
+              return value2 - value1;//升序排序
+            }
+          }
+          list.sort(compare('x'));
+          for(var i = 0; i < list.length;i++){
+            x_newdata.push(list[i]['x']);
+          }
+          for(var i = 0; i < y_number; i++){
+            var item = [];
+            for(var j = 0; j < list.length;j++){
+              item.push(list[j][i]);
+            }
+            y_newdata.push(item);
+          }
+          for(var i = 0; i < y_number; i++){
+            this.layout[this.currentId].option.series[i].data = y_newdata[i];
+          }
+          if(this.currentChartId == 2 || this.currentChartId == 7){
+            this.layout[this.currentId].option.yAxis.data = x_newdata;
+          }
+          else{
+            this.layout[this.currentId].option.xAxis.data = x_newdata;
+          }
         }
       }
     },
