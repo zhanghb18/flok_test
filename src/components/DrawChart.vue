@@ -1047,7 +1047,7 @@ export default {
           [
             "100",
             "120",
-            "130",
+            "135",
             "2020-08-12T16:43:48.000+08:00",
             "5"
           ]
@@ -1407,6 +1407,7 @@ export default {
         for(var i = 0; i < y_number; i++){
           ydata.push(this.layout[this.currentId].ydata[i].data);
         }
+        console.log(y_number);
         console.log(xdata);
         console.log(ydata);
         var data = {};
@@ -1440,6 +1441,8 @@ export default {
         else{
           this.layout[this.currentId].option.xAxis.data = x_newdata;
         }
+        console.log(this.layout[this.currentId]);
+        this.$forceUpdate();
       }
       if (e == "最小") {
         this.layout[this.currentId].function_name = e;
