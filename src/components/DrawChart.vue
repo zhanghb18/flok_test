@@ -77,9 +77,45 @@
 
           <div class="select_title">y轴</div>
           <el-button @click="y_axis_Id = true">选择y轴数据</el-button>
-            <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
+          <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
 
-          <div v-if="tvalue !='' && x_axis_Id!=''">
+          <div class="select_attribute" v-if="tvalue !='' && x_axis_Id!=''">
+            <div class="select_title">图表标题</div>
+            <el-input
+              class="input_title"
+              placeholder="请输入图表标题"
+              v-model="title"
+              @change="getTitle"
+              clearable>
+            </el-input>
+
+            <div class="select_title">x轴label</div>
+            <el-input
+              class="input_label"
+              placeholder="请输入x轴label"
+              v-model="x_label"
+              @change="getXLabel"
+              clearable>
+            </el-input>
+
+            <div class="select_title">y轴label</div>
+            <el-input
+              class="input_label"
+              placeholder="请输入y轴label"
+              v-model="y_label"
+              @change="getYLabel"
+              clearable>
+            </el-input>
+
+            <div class="select_title">图例</div>
+            <el-switch
+              class="switch_legend"
+              v-model="legend"
+              active-text="开"
+              inactive-text="关"
+              @change="getLegend">
+            </el-switch>
+
         <div class="select_title">聚集函数</div>
           <el-select v-model="a_functions" @change="getFunction">
             <el-option
@@ -90,14 +126,14 @@
           </el-select>
 
 
-        <div class="select_title">排序字段</div>
-          <el-select v-model="data_sort">
-            <el-option
-              v-for="(item,index) in this.data_sort_Info"
-              :value="item.name"
-              :key="index"
-            ></el-option>
-          </el-select>
+            <div class="select_title">排序字段</div>
+            <el-select v-model="data_sort">
+              <el-option
+                v-for="(item,index) in this.data_sort_Info"
+                :value="item.name"
+                :key="index"
+              ></el-option>
+            </el-select>
 
               <div v-if="data_sort == 'y轴'">
                 <div class="select_title">排序y轴</div>
@@ -112,7 +148,7 @@
 
           <div v-if="data_sort == 'x轴' || (data_sort == 'y轴' && y_axis_sort_Id != '')">
           <div class="select_title">排序方向</div>
-           <el-select v-model="data_sort_dir" @change="getsort">
+          <el-select v-model="data_sort_dir" @change="getsort">
               <el-option
                 v-for="(item,index) in this.data_sort_dir_Info"
                 :value="item.name"
@@ -132,6 +168,24 @@
                 :key="index"
               ></el-option>
             </el-select>
+
+            <div class="select_title">图表标题</div>
+            <el-input
+              class="input_title"
+              placeholder="请输入图表标题"
+              v-model="title"
+              @change="getTitle"
+              clearable>
+            </el-input>
+
+            <div class="select_title">图例</div>
+            <el-switch
+              class="switch_legend"
+              v-model="legend"
+              active-text="开"
+              inactive-text="关"
+              @change="getLegend">
+            </el-switch>
           </div>
             </el-submenu>
 
@@ -223,12 +277,12 @@
               :class="{active:index==typeActive}"
             >
               <component
-                  class="e-charts-light"
+                class="e-charts-light"
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
                 @click.native = "getId(item,index)"
-
+                style="height:100%"
               ></component>
           </grid-item>
           </grid-layout>
@@ -283,6 +337,10 @@ export default {
       y_axis_Id :"",
       y_axis_show :"",
       y_axis_sort_Id:"",
+      title:"",
+      x_label:"",
+      y_label:"",
+      legend: false,
       a_functions :"",
       data_sort :"",
       data_sort_dir:"",
@@ -409,7 +467,32 @@ export default {
           {show: true, title: 'myTest', param: 'myTest', icon: 'image://http://echarts.baidu.com/images/favicon.png'}
         ],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -420,6 +503,13 @@ export default {
             },
           },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -428,10 +518,10 @@ export default {
               }
             },
           },
-
           tooltip:{},
           series: [
             {
+              name: "value",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'line'
             }
@@ -447,7 +537,32 @@ export default {
           {show: true, title: 'myChangeData', param: 'myChangeData', icon: 'path d="M17.896,12.706v-0.005v-0.003L15.855,2.507c-0.046-0.24-0.255-0.413-0.5-0.413H4.899c-0.24,0-0.447,0.166-0.498,0.4L2.106,12.696c-0.008,0.035-0.013,0.071-0.013,0.107v4.593c0,0.28,0.229,0.51,0.51,0.51h14.792c0.28,0,0.51-0.229,0.51-0.51v-4.593C17.906,12.77,17.904,12.737,17.896,12.706 M5.31,3.114h9.625l1.842,9.179h-4.481c-0.28,0-0.51,0.229-0.51,0.511c0,0.703-1.081,1.546-1.785,1.546c-0.704,0-1.785-0.843-1.785-1.546c0-0.281-0.229-0.511-0.51-0.511H3.239L5.31,3.114zM16.886,16.886H3.114v-3.572H7.25c0.235,1.021,1.658,2.032,2.75,2.032c1.092,0,2.515-1.012,2.749-2.032h4.137V16.886z"'}
         ],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -458,6 +573,13 @@ export default {
             },
           },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -468,6 +590,7 @@ export default {
           },
           series: [
             {
+              name: "value",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
             }
@@ -483,7 +606,32 @@ export default {
           {show: true, title: 'myChangeData', param: 'myChangeData', icon: 'path d="M17.896,12.706v-0.005v-0.003L15.855,2.507c-0.046-0.24-0.255-0.413-0.5-0.413H4.899c-0.24,0-0.447,0.166-0.498,0.4L2.106,12.696c-0.008,0.035-0.013,0.071-0.013,0.107v4.593c0,0.28,0.229,0.51,0.51,0.51h14.792c0.28,0,0.51-0.229,0.51-0.51v-4.593C17.906,12.77,17.904,12.737,17.896,12.706 M5.31,3.114h9.625l1.842,9.179h-4.481c-0.28,0-0.51,0.229-0.51,0.511c0,0.703-1.081,1.546-1.785,1.546c-0.704,0-1.785-0.843-1.785-1.546c0-0.281-0.229-0.511-0.51-0.511H3.239L5.31,3.114zM16.886,16.886H3.114v-3.572H7.25c0.235,1.021,1.658,2.032,2.75,2.032c1.092,0,2.515-1.012,2.749-2.032h4.137V16.886z"'}
         ],
         option:{
-          xAxis: {
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
+          xAxis: {          
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -493,6 +641,13 @@ export default {
             },
           },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -504,6 +659,7 @@ export default {
           },
           series: [
             {
+              name: "value",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
             },
@@ -519,7 +675,32 @@ export default {
           {show: true, title: 'myChangeData', param: 'myChangeData', icon: 'path d="M17.896,12.706v-0.005v-0.003L15.855,2.507c-0.046-0.24-0.255-0.413-0.5-0.413H4.899c-0.24,0-0.447,0.166-0.498,0.4L2.106,12.696c-0.008,0.035-0.013,0.071-0.013,0.107v4.593c0,0.28,0.229,0.51,0.51,0.51h14.792c0.28,0,0.51-0.229,0.51-0.51v-4.593C17.906,12.77,17.904,12.737,17.896,12.706 M5.31,3.114h9.625l1.842,9.179h-4.481c-0.28,0-0.51,0.229-0.51,0.511c0,0.703-1.081,1.546-1.785,1.546c-0.704,0-1.785-0.843-1.785-1.546c0-0.281-0.229-0.511-0.51-0.511H3.239L5.31,3.114zM16.886,16.886H3.114v-3.572H7.25c0.235,1.021,1.658,2.032,2.75,2.032c1.092,0,2.515-1.012,2.749-2.032h4.137V16.886z"'}
         ],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value1', 'value2'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -530,6 +711,13 @@ export default {
             },
           },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -540,10 +728,12 @@ export default {
           },
           series: [
             {
+              name: "value1",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
             },
             {
+              name: "value2",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'line'
             },
@@ -556,7 +746,32 @@ export default {
         editMode: false,
         myFunctionKeys: [],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -567,6 +782,13 @@ export default {
             },
           },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -577,6 +799,7 @@ export default {
           },
           series: [
             {
+              name: "value",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'line',
               areaStyle: {}
@@ -590,10 +813,18 @@ export default {
         editMode: false,
         myFunctionKeys: [],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
           tooltip: {
             trigger: 'item'
           },
           legend: {
+            show: false,
             orient: 'vertical',
             left: 'left',
             textStyle:{
@@ -628,10 +859,18 @@ export default {
         editMode: false,
         myFunctionKeys: [],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
           tooltip: {
             trigger: 'item'
           },
           legend: {
+            show: false,
             orient: 'vertical',
             left: 'left',
             textStyle:{
@@ -663,7 +902,32 @@ export default {
         editMode: false,
         myFunctionKeys: [],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value1', 'value2'],
+            show: false,
+            orient:"vertical",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           yAxis: {
+            name: "",
+            nameLocation: "end",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
@@ -674,6 +938,13 @@ export default {
             },
           },
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color:"black",
+              fontSize:12,
+              padding:10,
+            },         
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -684,10 +955,12 @@ export default {
           },
           series: [
             {
+              name: "value1",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'bar'
             },
             {
+              name: "value2",
               data: [150, 230, 224, 218, 135, 147, 260],
               type: 'line'
             }
@@ -700,10 +973,18 @@ export default {
         editMode: false,
         myFunctionKeys: [],
         option:{
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
           tooltip: {
             trigger: 'item'
           },
           legend: {
+            show: false,
             orient: 'vertical',
             left: 'left',
             textStyle: {
@@ -950,6 +1231,10 @@ export default {
       this.data_sort_dir = e.data_sort_name;
       console.log(this.data_Id);
       this.typeActive = index;
+      this.title = e.title
+      this.x_label = e.x_label
+      this.y_label = e.y_label
+      this.legend = e.legend
     },
     getX: function(e) {
       console.log(e);
@@ -979,34 +1264,26 @@ export default {
       this.layout[this.currentId].xdata = JSON.parse(JSON.stringify(this.datatransform[e]));
     },
     getY: function(e) {
-      console.log(e);
-      console.log(this.transferData);
-      console.log(this.transferData[e[0]].label);
+      // console.log(e);
+      // console.log(this.transferData);
+      // console.log(this.transferData[e[0]].label);
       if(this.layout[this.currentId].function_name != ""){
         this.layout[this.currentId].function_name = "";
         this.a_functions = "";
         this.getX(this.layout[this.currentId].x_name);
       }
       this.layout[this.currentId].y_name = e;
-      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 2 || this.currentChartId == 4){
         var type = this.layout[this.currentId].option.series[0].type;
-        var item = [
-          {
-            data:'',
-            type:''
-          }
-        ];
-        this.layout[this.currentId].option.series = item;
+        this.layout[this.currentId].option.series = [];
+        this.layout[this.currentId].option.legend.data = []
         for(var i = 0; i < e.length; i++){
-          if(i != 0) this.layout[this.currentId].option.series.push({});
+          this.layout[this.currentId].option.series.push({});
+          this.layout[this.currentId].option.legend.data.push(this.transferData[e[i]].label);
+          this.layout[this.currentId].option.series[i].name = this.transferData[e[i]].label;
           this.layout[this.currentId].option.series[i].data = this.datatransform[this.transferData[e[i]].label];
           this.layout[this.currentId].option.series[i].type = type;
         }
-        console.log(this.layout[this.currentId].option.series);
-        this.$forceUpdate();
-      }
-      if (this.currentChartId == 2) {
-        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
         this.$forceUpdate();
       }
       if (this.currentChartId == 3) {
@@ -1075,6 +1352,44 @@ export default {
           sum+=parseInt(arr[i]);
       }
       return sum;
+    },
+    getTitle: function(e) {
+      this.layout[this.currentId].title = e;
+      this.layout[this.currentId].option.title.text = e;
+    },
+    getXLabel: function(e) {
+      this.layout[this.currentId].x_label = e;
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
+        this.layout[this.currentId].option.xAxis.name = e;
+      }
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.yAxis.name = e;
+      }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.xAxis.name = e;
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.yAxis.name = e;
+      }
+    },
+    getYLabel: function(e) {
+      this.layout[this.currentId].y_label = e;
+      if (this.currentChartId == 0 || this.currentChartId == 1 || this.currentChartId == 4){
+        this.layout[this.currentId].option.yAxis.name = e;
+      }
+      if (this.currentChartId == 2) {
+        this.layout[this.currentId].option.xAxis.name = e;
+      }
+      if (this.currentChartId == 3) {
+        this.layout[this.currentId].option.yAxis.name = e;
+      }
+      if (this.currentChartId == 7) {
+        this.layout[this.currentId].option.xAxis.name = e;
+      }
+    },
+    getLegend: function(e) {
+      this.layout[this.currentId].legend = e;
+      this.layout[this.currentId].option.legend.show = e;
     },
     getFunction: function (e) {
       console.log(e);
@@ -1522,6 +1837,9 @@ export default {
     margin-bottom: 3px;
     margin-top: 5px;
   }
+  .select_xy {
+    margin-bottom: 5px;
+  }
   .select_title {
     font-size: 14px;
   }
@@ -1551,5 +1869,20 @@ export default {
   .el-button {
     margin-top:5px;
     width: 100%;
+  }
+  .select_attribute {
+    margin-top: 10px;
+  }
+  .input_title {
+    margin-top:5px;
+    margin-bottom: 5px;
+  }
+  .input_label {
+    margin-top:5px;
+    margin-bottom: 5px;
+  }
+  .switch_legend {
+    margin-top:5px;
+    margin-bottom: 5px;
   }
 </style>
