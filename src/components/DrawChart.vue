@@ -1264,9 +1264,6 @@ export default {
       this.layout[this.currentId].xdata = JSON.parse(JSON.stringify(this.datatransform[e]));
     },
     getY: function(e) {
-      // console.log(e);
-      // console.log(this.transferData);
-      // console.log(this.transferData[e[0]].label);
       if(this.layout[this.currentId].function_name != ""){
         this.layout[this.currentId].function_name = "";
         this.a_functions = "";
@@ -1286,12 +1283,25 @@ export default {
         }
         this.$forceUpdate();
       }
-      if (this.currentChartId == 3) {
+      if (this.currentChartId == 3) { // 柱线混合图
+        var type1 = this.layout[this.currentId].option.series[0].type
+        var type2 = this.layout[this.currentId].option.series[1].type
+        this.layout[this.currentId].option.series = [];
+        this.layout[this.currentId].option.legend.data = []
+        for(var i = 0; i < e.length; i++){
+          this.layout[this.currentId].option.series.push({});
+          this.layout[this.currentId].option.series.push({});
+          this.layout[this.currentId].option.legend.data.push(this.transferData[e[i]].label);
+          this.layout[this.currentId].option.series[i].name = this.transferData[e[i]].label;
+          this.layout[this.currentId].option.series[i].data = this.datatransform[this.transferData[e[i]].label];
+          this.layout[this.currentId].option.series[i].type = type;
+        }
+        this.$forceUpdate();
         this.layout[this.currentId].option.series[0].data = this.datatransform[e];
         this.layout[this.currentId].option.series[1].data = this.datatransform[e];
         this.$forceUpdate();
       }
-      if (this.currentChartId == 7) {
+      if (this.currentChartId == 7) { // 纵向混合图
         this.layout[this.currentId].option.series[0].data = this.datatransform[e];
         this.layout[this.currentId].option.series[1].data = this.datatransform[e];
         this.$forceUpdate();
