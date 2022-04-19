@@ -126,14 +126,14 @@
           </el-select>
 
 
-            <div class="select_title">排序字段</div>
-            <el-select v-model="data_sort">
-              <el-option
-                v-for="(item,index) in this.data_sort_Info"
-                :value="item.name"
-                :key="index"
-              ></el-option>
-            </el-select>
+        <div class="select_title">排序字段</div>
+          <el-select v-model="data_sort" @change="getsortname">
+            <el-option
+              v-for="(item,index) in this.data_sort_Info"
+              :value="item.name"
+              :key="index"
+            ></el-option>
+          </el-select>
 
               <div v-if="data_sort == 'y轴'">
                 <div class="select_title">排序y轴</div>
@@ -1658,6 +1658,22 @@ export default {
         else{
           this.layout[this.currentId].option.xAxis.data = x_newdata;
         }
+      }
+    },
+    getsortname: function(e){
+      if(e == "x轴"){
+        this.data_sort = this.layout[this.currentId].x_name;
+      }
+      if(e == "y轴"){
+        var y_name = this.layout[this.currentId].y_name;
+        var y_axis = [];
+        for(var i = 0; i < y_name.length; i++){
+          var item = {};
+          item['id'] = i;
+          item['name'] = this.transferData[y_name[i]].label;
+          y_axis.push(item);
+        }
+        this.y_axis_info = y_axis;
       }
     },
     getsort: function (e) {
