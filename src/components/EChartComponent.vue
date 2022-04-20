@@ -54,7 +54,7 @@ export default {
       immediate:false,
       handler(newval,oldval){
         console.log("新值："+newval,"旧值："+ oldval);
-        this.onMounted();
+        setTimeout(this.onMounted,0);
       }
     }
   },
@@ -114,7 +114,7 @@ export default {
           }
         }
 
-        this.chart.setOption(finalOption)
+        this.chart.setOption(finalOption,{notMerge:true})
 
         /* default open toolbox Zoom function*/
         const toolboxDataZoomComponent = this.chart._componentsViews.find(c=>c._features && c._features.dataZoom) 
