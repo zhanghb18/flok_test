@@ -106,15 +106,14 @@
               @change="getYLabel"
               clearable>
             </el-input>
-
-            <div class="select_title">图例</div>
-            <el-switch
-              class="switch_legend"
-              v-model="legend"
-              active-text="开"
-              inactive-text="关"
-              @change="getLegend">
-            </el-switch>
+            
+            <div class="select_title">显示设定</div>
+            <div style="margin-bottom:5px;background:#ffffff;">
+            <el-checkbox class="select_show" v-model="legend" @change="getLegend">图例</el-checkbox>
+            <el-checkbox class="select_show" v-model="grid" @change="getGrid">网格</el-checkbox>
+            <el-checkbox class="select_show" v-model="axis" @change="getAxis">轴线</el-checkbox>
+            <el-checkbox class="select_show" v-model="scale" @change="getScale">刻度</el-checkbox>
+            </div>
 
         <div class="select_title">聚集函数</div>
           <el-select v-model="a_functions" @change="getFunction">
@@ -169,6 +168,7 @@
               ></el-option>
             </el-select>
 
+            <div class="select_attribute" v-if="data_Id != ''">
             <div class="select_title">图表标题</div>
             <el-input
               class="input_title"
@@ -178,14 +178,12 @@
               clearable>
             </el-input>
 
-            <div class="select_title">图例</div>
-            <el-switch
-              class="switch_legend"
-              v-model="legend"
-              active-text="开"
-              inactive-text="关"
-              @change="getLegend">
-            </el-switch>
+            <div class="select_title">显示设定</div>
+            <div style="margin-bottom:5px;background:#ffffff;">
+            <el-checkbox class="select_show" v-model="legend" @change="getLegend">图例</el-checkbox>
+            <el-checkbox class="select_show" v-model="labelLine" @change="getLabelLine">指示线</el-checkbox>
+            </div>
+            </div>
           </div>
             </el-submenu>
 
@@ -307,7 +305,6 @@
 <script>
 
 import { GridLayout, GridItem } from "vue-grid-layout";
-import { debounce } from 'lodash-es'
 import EChartComponent from "./EChartComponent.vue"
 import EleResize from '../../resize'
 
@@ -340,7 +337,11 @@ export default {
       title:"",
       x_label:"",
       y_label:"",
-      legend: false,
+      legend: true,
+      grid: true,
+      axis: true,
+      scale: true,
+      labelLine: true,
       a_functions :"",
       data_sort :"",
       data_sort_dir:"",
@@ -476,8 +477,8 @@ export default {
           },
           legend: {
             data: ['value'],
-            show: false,
-            orient:"vertical",
+            show: true,
+            orient:"horizontal",
             right: 10,
             top: 20,
             textStyle: {
@@ -494,6 +495,12 @@ export default {
               padding:10,
             },
             type: 'category',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -511,8 +518,14 @@ export default {
               padding:10,
             },
             type: 'value',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
-              show:true,
+              show: true,
               textStyle:{
                 color:"#222222"
               }
@@ -546,7 +559,7 @@ export default {
           },
           legend: {
             data: ['value'],
-            show: false,
+            show: true,
             orient:"vertical",
             right: 10,
             top: 20,
@@ -564,6 +577,12 @@ export default {
               padding:10,
             },
             type: 'category',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -581,6 +600,12 @@ export default {
               padding:10,
             },
             type: 'value',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
               show:true,
               textStyle:{
@@ -615,7 +640,7 @@ export default {
           },
           legend: {
             data: ['value'],
-            show: false,
+            show: true,
             orient:"vertical",
             right: 10,
             top: 20,
@@ -633,6 +658,12 @@ export default {
               padding:10,
             },
             type: 'value',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
               show:true,
               textStyle:{
@@ -649,6 +680,12 @@ export default {
               padding:10,
             },
             type: 'category',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -684,7 +721,7 @@ export default {
           },
           legend: {
             data: ['value1', 'value2'],
-            show: false,
+            show: true,
             orient:"vertical",
             right: 10,
             top: 20,
@@ -755,7 +792,7 @@ export default {
           },
           legend: {
             data: ['value'],
-            show: false,
+            show: true,
             orient:"vertical",
             right: 10,
             top: 20,
@@ -773,6 +810,12 @@ export default {
               padding:10,
             },
             type: 'category',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -790,6 +833,12 @@ export default {
               padding:10,
             },
             type: 'value',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
               show:true,
               textStyle:{
@@ -824,7 +873,7 @@ export default {
             trigger: 'item'
           },
           legend: {
-            show: false,
+            show: true,
             orient: 'vertical',
             left: 'left',
             textStyle:{
@@ -835,6 +884,11 @@ export default {
             {
               type: 'pie',
               radius: '50%',
+              label: {
+                normal: {
+                  show: true,
+                }
+              },
               data: [
                 { value: 1048, name: 'Search Engine' },
                 { value: 735, name: 'Direct' },
@@ -870,7 +924,7 @@ export default {
             trigger: 'item'
           },
           legend: {
-            show: false,
+            show: true,
             orient: 'vertical',
             left: 'left',
             textStyle:{
@@ -881,6 +935,11 @@ export default {
             {
               type: 'pie',
               radius: ['20%', '70%'],
+              label: {
+                normal: {
+                  show: true,
+                }
+              },
               data: [
                 { value: 45, name: 'Search Engine' },
                 { value: 50, name: 'Direct' },
@@ -911,7 +970,7 @@ export default {
           },
           legend: {
             data: ['value1', 'value2'],
-            show: false,
+            show: true,
             orient:"vertical",
             right: 10,
             top: 20,
@@ -984,7 +1043,7 @@ export default {
             trigger: 'item'
           },
           legend: {
-            show: false,
+            show: true,
             orient: 'vertical',
             left: 'left',
             textStyle: {
@@ -995,6 +1054,11 @@ export default {
             {
               type: 'pie',
               radius: ['40%', '70%'],
+              label: {
+                normal: {
+                  show: true,
+                }
+              },
               data: [
                 { value: 1048, name: 'Search Engine' },
                 { value: 735, name: 'Direct' },
@@ -1234,7 +1298,11 @@ export default {
       this.title = e.title
       this.x_label = e.x_label
       this.y_label = e.y_label
-      this.legend = e.legend
+      this.legend = this.layout[this.currentId].option.legend.show
+      this.grid = this.layout[this.currentId].option.xAxis.splitLine.show
+      this.axis = this.layout[this.currentId].option.xAxis.axisLine.show
+      this.scale = this.layout[this.currentId].option.xAxis.axisLabel.show
+      this.labelLine = this.layout[this.currentId].option.series[0].label.normal.show
     },
     getX: function(e) {
       console.log(e);
@@ -1400,6 +1468,26 @@ export default {
     getLegend: function(e) {
       this.layout[this.currentId].legend = e;
       this.layout[this.currentId].option.legend.show = e;
+    },
+    getGrid: function(e) {
+      this.layout[this.currentId].grid = e;
+      this.layout[this.currentId].option.xAxis.splitLine.show = e;
+      this.layout[this.currentId].option.yAxis.splitLine.show = e;
+    },
+    getAxis: function(e) {
+      this.layout[this.currentId].axis = e;
+      this.layout[this.currentId].option.xAxis.axisLine.show = e;
+      this.layout[this.currentId].option.yAxis.axisLine.show = e;
+    },
+    getScale: function(e) {
+      this.layout[this.currentId].scale = e;
+      this.layout[this.currentId].option.xAxis.axisLabel.show = e;
+      this.layout[this.currentId].option.yAxis.axisLabel.show = e;
+    },
+    getLabelLine: function(e) {
+      this.layout[this.currentId].labelLine = e;
+      this.layout[this.currentId].option.series[0].label.normal.show = e;
+      this.$forceUpdate();
     },
     getFunction: function (e) {
       console.log(e);
@@ -1913,5 +2001,8 @@ export default {
   .switch_legend {
     margin-top:5px;
     margin-bottom: 5px;
+  }
+  .select_show {
+    width: 100%;
   }
 </style>
