@@ -24,8 +24,8 @@
                 <span class="text">{{ item.i }}</span>
             </grid-item>
         </grid-layout>
-    </div>
-    <VueGridLayout /> -->
+    </div>-->
+<!--    <VueGridLayout />-->
   </div>
 </template>
 
