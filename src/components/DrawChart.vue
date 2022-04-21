@@ -472,24 +472,24 @@ export default {
           {show: true, title: 'myTest', param: 'myTest', icon: 'image://http://echarts.baidu.com/images/favicon.png'}
         ],
         option:{
-          // title: {
-          //   text: "",
-          //   x: "center",
-          //   textStyle: {
-          //       fontSize: 14,
-          //   },
-          // },
-          // legend: {
-          //   data: ['value'],
-          //   show: true,
-          //   orient:"horizontal",
-          //   right: 10,
-          //   top: 20,
-          //   textStyle: {
-          //       color: '#1a1a1a',
-          //       fontSize: 12,
-          //   },
-          // },
+          title: {
+            text: "",
+            x: "center",
+            textStyle: {
+                fontSize: 14,
+            },
+          },
+          legend: {
+            data: ['value'],
+            show: true,
+            orient:"horizontal",
+            right: 10,
+            top: 20,
+            textStyle: {
+                color: '#1a1a1a',
+                fontSize: 12,
+            },
+          },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
             orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
@@ -561,7 +561,7 @@ export default {
               }
             },
           },
-          tooltip:{},
+          // tooltip:{},
           series: [
             {
               name: "value",
@@ -707,15 +707,6 @@ export default {
                 fontSize: 12,
             },
           },
-          xAxis: {
-            name: "",
-            nameLocation: "center",
-            nameTextStyle: {
-              color: "black",
-              fontSize: 12,
-              padding: 10,
-            },
-          },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
             orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
@@ -743,6 +734,13 @@ export default {
             }
           ],
           xAxis: {
+            name: "",
+            nameLocation: "center",
+            nameTextStyle: {
+              color: "black",
+              fontSize: 12,
+              padding: 10,
+            },
             type: 'value',
             splitLine: {
               show: true

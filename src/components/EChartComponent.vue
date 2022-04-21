@@ -94,42 +94,42 @@ export default {
           ...this.$props.echartOption
         }
 
-        if(finalOption?.toolbox?.feature){
-          const selectedMyFunctions = {}
+        // if(finalOption?.toolbox?.feature){
+        //   const selectedMyFunctions = {}
+        //
+        //   for(const [key, values] of Object.entries(this.$props.myTestFunctions())){
+        //     this.$props.myFunctionKeys.forEach(item=>{
+        //       if(item.param === key){
+        //         selectedMyFunctions[key] = {
+        //           ...item,
+        //           onclick: values
+        //         }
+        //       }
+        //     })
+        //   }
+        //
+        //   finalOption.toolbox.feature = {
+        //     ...finalOption.toolbox.feature,
+        //     ...selectedMyFunctions
+        //   }
+        // }
 
-          for(const [key, values] of Object.entries(this.$props.myTestFunctions())){
-            this.$props.myFunctionKeys.forEach(item=>{
-              if(item.param === key){
-                selectedMyFunctions[key] = {
-                  ...item,
-                  onclick: values
-                }
-              }
-            })
-          }
-
-          finalOption.toolbox.feature = {
-            ...finalOption.toolbox.feature,
-            ...selectedMyFunctions
-          }
-        }
-
-        this.chart.setOption(finalOption,{notMerge:true})
+        this.chart.setOption(finalOption)
 
         /* default open toolbox Zoom function*/
-        const toolboxDataZoomComponent = this.chart._componentsViews.find(c=>c._features && c._features.dataZoom) 
-        if(toolboxDataZoomComponent){
-          toolboxDataZoomComponent._features.dataZoom.model.iconPaths.zoom.trigger('click')
-        }
-
-        EleResize.on(targetResizeDiv, () => {
-          this.chart.resize()
-        })
-        if(this.$props.hasDataZoom){
-          this.chart.on('dataZoom', () => {
-            this.getChartDateRange(this.chart)
-          })
-        }
+        // const toolboxDataZoomComponent = this.chart._componentsViews.find(c=>c._features && c._features.dataZoom)
+        // if(toolboxDataZoomComponent){
+        //   toolboxDataZoomComponent._features.dataZoom.model.iconPaths.zoom.trigger('click')
+        // }
+        //
+        // EleResize.on(targetResizeDiv, () => {
+        //   this.chart.resize()
+        // })
+        // if(this.$props.hasDataZoom){
+        //   this.chart.on('dataZoom', () => {
+        //     this.getChartDateRange(this.chart)
+        //   })
+        // }
     },
     onDestroyed(){
       const targetResizeDiv = document.querySelector(`#chart-${this.$props.uniqueId}`)
