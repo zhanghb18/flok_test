@@ -472,24 +472,24 @@ export default {
           {show: true, title: 'myTest', param: 'myTest', icon: 'image://http://echarts.baidu.com/images/favicon.png'}
         ],
         option:{
-          title: {
-            text: "",
-            x: "center",
-            textStyle: {
-                fontSize: 14,
-            },
-          },
-          legend: {
-            data: ['value'],
-            show: true,
-            orient:"horizontal",
-            right: 10,
-            top: 20,
-            textStyle: {
-                color: '#1a1a1a',
-                fontSize: 12,
-            },
-          },
+          // title: {
+          //   text: "",
+          //   x: "center",
+          //   textStyle: {
+          //       fontSize: 14,
+          //   },
+          // },
+          // legend: {
+          //   data: ['value'],
+          //   show: true,
+          //   orient:"horizontal",
+          //   right: 10,
+          //   top: 20,
+          //   textStyle: {
+          //       color: '#1a1a1a',
+          //       fontSize: 12,
+          //   },
+          // },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
             orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
@@ -512,8 +512,8 @@ export default {
             {
               type: 'inside',
               realtime: true,
-              start: 65,
-              end: 85
+              start: 0,
+              end: 100
             }
           ],
           xAxis: {
@@ -621,8 +621,8 @@ export default {
             {
               type: 'inside',
               realtime: true,
-              start: 65,
-              end: 85
+              start: 0,
+              end: 100
             }
           ],
           xAxis: {
@@ -711,10 +711,11 @@ export default {
             name: "",
             nameLocation: "center",
             nameTextStyle: {
-              color:"black",
-              fontSize:12,
-              padding:10,
+              color: "black",
+              fontSize: 12,
+              padding: 10,
             },
+          },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
             orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
