@@ -117,19 +117,19 @@ export default {
         this.chart.setOption(finalOption)
 
         /* default open toolbox Zoom function*/
-        // const toolboxDataZoomComponent = this.chart._componentsViews.find(c=>c._features && c._features.dataZoom)
-        // if(toolboxDataZoomComponent){
-        //   toolboxDataZoomComponent._features.dataZoom.model.iconPaths.zoom.trigger('click')
-        // }
-        //
-        // EleResize.on(targetResizeDiv, () => {
-        //   this.chart.resize()
-        // })
-        // if(this.$props.hasDataZoom){
-        //   this.chart.on('dataZoom', () => {
-        //     this.getChartDateRange(this.chart)
-        //   })
-        // }
+        const toolboxDataZoomComponent = this.chart._componentsViews.find(c=>c._features && c._features.dataZoom)
+        if(toolboxDataZoomComponent){
+          toolboxDataZoomComponent._features.dataZoom.model.iconPaths.zoom.trigger('click')
+        }
+
+        EleResize.on(targetResizeDiv, () => {
+          this.chart.resize()
+        })
+        if(this.$props.hasDataZoom){
+          this.chart.on('dataZoom', () => {
+            this.getChartDateRange(this.chart)
+          })
+        }
     },
     onDestroyed(){
       const targetResizeDiv = document.querySelector(`#chart-${this.$props.uniqueId}`)

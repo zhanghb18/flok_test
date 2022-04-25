@@ -466,7 +466,7 @@ export default {
       {
         "x":0, "y":0, "w":4, "h":3,
         i: "折线图",
-        editMode: false,
+        editMode: true,
         hasDataZoom: true,
         myFunctionKeys: [
           {show: true, title: 'myTest', param: 'myTest', icon: 'image://http://echarts.baidu.com/images/favicon.png'}
@@ -484,7 +484,7 @@ export default {
             show: true,
             orient:"horizontal",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -492,7 +492,9 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -504,7 +506,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -593,7 +595,7 @@ export default {
             show: true,
             orient:"vertical",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -601,7 +603,9 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -613,7 +617,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -701,7 +705,7 @@ export default {
             show: true,
             orient:"vertical",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -709,7 +713,9 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -721,7 +727,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -799,7 +805,9 @@ export default {
         option:{
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -811,7 +819,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -833,9 +841,9 @@ export default {
           legend: {
             data: ['value1', 'value2'],
             show: true,
-            orient:"vertical",
+            orient:"horizontal",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -904,9 +912,9 @@ export default {
           legend: {
             data: ['value'],
             show: true,
-            orient:"vertical",
+            orient:"horizontal",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -914,7 +922,9 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -926,7 +936,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -1019,7 +1029,7 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -1082,7 +1092,7 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -1132,9 +1142,9 @@ export default {
           legend: {
             data: ['value1', 'value2'],
             show: true,
-            orient:"vertical",
+            orient:"horizontal",
             right: 10,
-            top: 20,
+            top: 30,
             textStyle: {
                 color: '#1a1a1a',
                 fontSize: 12,
@@ -1142,7 +1152,9 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            left: 10,
+            top: 5,
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
@@ -1154,7 +1166,7 @@ export default {
           },
           dataZoom: [
             {
-              show: true,
+              show: false,
               realtime: true,
               start: 0,
               end: 100
@@ -1239,7 +1251,7 @@ export default {
           },
           toolbox: {
             show : true,                                 //是否显示工具栏组件
-            orient:"vertical",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+            orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
             feature: {
               // dataZoom: {
               //   yAxisIndex: 'none'
