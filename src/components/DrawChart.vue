@@ -245,6 +245,9 @@
         <div class="select_title">看板定时刷新</div>
           <el-button @click="dialog = true">选项</el-button>
             <dialog_c v-if="dialog" :visible.sync="dialog"></dialog_c>
+        
+        <div class="select_title">看板保存</div>
+          <el-button @click="save_layout">保存看板</el-button>
           </el-submenu>
         </el-menu>
 
@@ -311,6 +314,7 @@
 import { GridLayout, GridItem } from "vue-grid-layout";
 import EChartComponent from "./EChartComponent.vue"
 import EleResize from '../../resize'
+import { saveAs } from 'file-saver';
 
 let mouseXY = {"x": null, "y": null};
 let DragPos = {"x": null, "y": null, "w": 1, "h": 1, "i": null};
@@ -1385,6 +1389,10 @@ export default {
     console.log(this.x_axis_Info);
     console.log(this.y_axis_Info);
     console.log(this.datatransform);
+
+    var appData = require('../save.json');
+    console.log(appData);
+    this.layout = appData;
   },
   mounted(){
     //获取drag时的鼠标坐标
@@ -2182,6 +2190,14 @@ export default {
         myChangeData
       }
       return list
+    },
+    save_layout:function(){
+      console.log("save");
+      var content = JSON.stringify(this.layout);
+      var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+      console.log("chenggong");
+      var FileSaver=require('file-saver');
+      FileSaver.saveAs(blob, "save.json");
     },
   }
 };
