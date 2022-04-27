@@ -1392,7 +1392,7 @@ export default {
 
     var appData = require('../save.json');
     console.log(appData);
-    this.layout = appData;
+    //this.layout = appData;
   },
   mounted(){
     //获取drag时的鼠标坐标
@@ -1570,7 +1570,7 @@ export default {
         }
         this.$forceUpdate();
       }
-      if (this.currentChartId == 3) { // 柱线混合图
+      if (this.currentChartId == 3 || this.currentChartId == 7) { // 柱线混合图和纵向混合图
         var type1 = this.layout[this.currentId].option.series[0].type
         var type2 = this.layout[this.currentId].option.series[1].type
         this.layout[this.currentId].option.series = [];
@@ -1586,15 +1586,15 @@ export default {
           //添加第二种图表
           this.layout[this.currentId].option.series[2*i].name = this.transferData[e[i]].label;
           this.layout[this.currentId].option.series[2*i].data = this.datatransform[this.transferData[e[i]].label];
-          this.layout[this.currentId].option.series[2*i].type = type;
+          this.layout[this.currentId].option.series[2*i].type = type2;
         }
         this.$forceUpdate();
       }
-      if (this.currentChartId == 7) { // 纵向混合图
-        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
-        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
-        this.$forceUpdate();
-      }
+      // if (this.currentChartId == 7) { // 纵向混合图
+      //   this.layout[this.currentId].option.series[0].data = this.datatransform[e];
+      //   this.layout[this.currentId].option.series[1].data = this.datatransform[e];
+      //   this.$forceUpdate();
+      // }
       this.layout[this.currentId].ydata = JSON.parse(JSON.stringify(this.layout[this.currentId].option.series));
     },
     get_data: function(e) {
