@@ -136,7 +136,7 @@
 
               <div v-if="data_sort == 'y轴'">
                 <div class="select_title">排序y轴</div>
-                <el-select v-model="y_axis_sort_Id">
+                <el-select v-model="y_axis_sort_Id" @change="get_ysort_name">
                   <el-option
                     v-for="(item,index) in this.y_axis_Info"
                     :value="item.name"
@@ -145,7 +145,7 @@
                 </el-select>
               </div>
 
-          <div v-if="data_sort == 'x轴' || (data_sort == 'y轴' && y_axis_sort_Id != '')">
+          <div v-if="data_sort_type == 'x轴' || (data_sort == 'y轴' && y_axis_sort_Id != '')">
           <div class="select_title">排序方向</div>
           <el-select v-model="data_sort_dir" @change="getsort">
               <el-option
@@ -327,6 +327,7 @@ export default {
   },
   data() {
     return {
+      data_sort_type:"",
       styles : ['e-charts-light', 'e-charts-dark'],
       styleId : 0,
       currentId:0,
@@ -863,6 +864,12 @@ export default {
             },
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
               show:true,
               textStyle:{
@@ -879,6 +886,12 @@ export default {
               padding:10,
             },
             type: 'value',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             axisLabel:{//修改坐标系字体颜色
               show:true,
               textStyle:{
@@ -1130,7 +1143,7 @@ export default {
           ]
         }
       },
-            {
+      {
         "x":8, "y":16, "w":4, "h":4,
         i: "纵向混合图",
         editMode: false,
@@ -1191,6 +1204,12 @@ export default {
               padding:10,
             },
             type: 'category',
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
+            },
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             axisLabel:{//修改坐标系字体颜色
               show:true,
@@ -1206,6 +1225,12 @@ export default {
               color:"black",
               fontSize:12,
               padding:10,
+            },
+            splitLine: {
+              show: true
+            },
+            axisLine: {
+              show: true
             },
             type: 'value',
             axisLabel:{//修改坐标系字体颜色
@@ -1512,6 +1537,12 @@ export default {
       this.data_Id = e.data_name;
       this.a_functions = e.function_name;
       this.data_sort_dir = e.data_sort_name;
+      if(e.data_sort_axis == "x轴"){
+        this.data_sort_type = "x轴"
+        this.data_sort = e.x_name;
+      } 
+      else this.data_sort = e.data_sort_axis;
+      this.y_axis_sort_Id = e.y_axis_sort_name;
       console.log(this.data_Id);
       this.typeActive = index;
       this.title = e.title
@@ -1529,6 +1560,12 @@ export default {
       if(this.layout[this.currentId].function_name != ""){
         this.layout[this.currentId].function_name = "";
         this.a_functions = "";
+        this.getY(this.layout[this.currentId].y_name);
+      }
+      if(this.layout[this.currentId].data_sort_name != ""){
+        this.layout[this.currentId].data_sort_name = "";
+        this.data_sort = "";
+        this.data_sort_type = "";
         this.getY(this.layout[this.currentId].y_name);
       }
       this.layout[this.currentId].x_name = e;
@@ -1554,6 +1591,12 @@ export default {
       if(this.layout[this.currentId].function_name != ""){
         this.layout[this.currentId].function_name = "";
         this.a_functions = "";
+        this.getX(this.layout[this.currentId].x_name);
+      }
+      if(this.layout[this.currentId].data_sort_name != ""){
+        this.layout[this.currentId].data_sort_name = "";
+        this.data_sort = "";
+        this.data_sort_type = "";
         this.getX(this.layout[this.currentId].x_name);
       }
       this.layout[this.currentId].y_name = e;
@@ -1584,17 +1627,12 @@ export default {
           this.layout[this.currentId].option.series[2*i].data = this.datatransform[this.transferData[e[i]].label];
           this.layout[this.currentId].option.series[2*i].type = type1;
           //添加第二种图表
-          this.layout[this.currentId].option.series[2*i].name = this.transferData[e[i]].label;
-          this.layout[this.currentId].option.series[2*i].data = this.datatransform[this.transferData[e[i]].label];
-          this.layout[this.currentId].option.series[2*i].type = type2;
+          this.layout[this.currentId].option.series[2*i+1].name = this.transferData[e[i]].label;
+          this.layout[this.currentId].option.series[2*i+1].data = this.datatransform[this.transferData[e[i]].label];
+          this.layout[this.currentId].option.series[2*i+1].type = type2;
         }
         this.$forceUpdate();
       }
-      // if (this.currentChartId == 7) { // 纵向混合图
-      //   this.layout[this.currentId].option.series[0].data = this.datatransform[e];
-      //   this.layout[this.currentId].option.series[1].data = this.datatransform[e];
-      //   this.$forceUpdate();
-      // }
       this.layout[this.currentId].ydata = JSON.parse(JSON.stringify(this.layout[this.currentId].option.series));
     },
     get_data: function(e) {
@@ -1970,8 +2008,10 @@ export default {
       }
     },
     getsortname: function(e){
+      this.layout[this.currentId].data_sort_axis = e;
       if(e == "x轴"){
         this.data_sort = this.layout[this.currentId].x_name;
+        this.data_sort_type = "x轴";
       }
       if(e == "y轴"){
         var y_name = this.layout[this.currentId].y_name;
@@ -1982,127 +2022,143 @@ export default {
           item['name'] = this.transferData[y_name[i]].label;
           y_axis.push(item);
         }
-        this.y_axis_info = y_axis;
+        this.y_axis_Info = y_axis;
+        this.data_sort_type = "y轴";
       }
+    },
+    get_ysort_name: function(e){
+      this.layout[this.currentId].y_axis_sort_name = e;
     },
     getsort: function (e) {
       this.layout[this.currentId].data_sort_name = e;
       if (e == "从小到大"){
-        if(this.data_sort == 'x轴'){
-          var xdata;
-          var ydata = [];
-          var x_newdata = [];
-          var y_newdata = [];
-          if(this.currentChartId == 2 || this.currentChartId == 7){
-            xdata = this.layout[this.currentId].option.yAxis.data;
+        var xdata;
+        var ydata = [];
+        var x_newdata = [];
+        var y_newdata = [];
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          xdata = this.layout[this.currentId].option.yAxis.data;
+        }
+        else{
+          xdata = this.layout[this.currentId].option.xAxis.data;
+        }
+        var y_number = this.layout[this.currentId].option.series.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].option.series[i].data);
+        }
+        var list = [];
+        for(var i = 0; i < xdata.length; i++){
+          var item = {};
+          item['x'] = xdata[i];
+          for(var j = 0; j < y_number;j++){
+            item[j] = ydata[j][i];
           }
-          else{
-            xdata = this.layout[this.currentId].option.xAxis.data;
+          list.push(item);
+        }
+        // 排序方法
+        function compare(property) {//property:根据什么属性排序
+          return function(a,b){
+            var value1 = a[property];
+            var value2 = b[property];
+            /*
+            * value2 - value1; ——> 降序
+            * value1 - value2; ——> 升序
+            */
+            return value1 - value2;//升序排序
           }
-          var y_number = this.layout[this.currentId].option.series.length;
-          for(var i = 0; i < y_number; i++){
-            ydata.push(this.layout[this.currentId].option.series[i].data);
-          }
-          var list = [];
-          for(var i = 0; i < xdata.length; i++){
-            var item = {};
-            item['x'] = xdata[i];
-            for(var j = 0; j < y_number;j++){
-              item[j] = ydata[j][i];
-            }
-            list.push(item);
-          }
-          // 排序方法
-          function compare(property) {//property:根据什么属性排序
-            return function(a,b){
-              var value1 = a[property];
-              var value2 = b[property];
-              /*
-              * value2 - value1; ——> 降序
-              * value1 - value2; ——> 升序
-              */
-              return value1 - value2;//升序排序
-            }
-          }
+        }
+        if(this.data_sort_type == 'x轴'){
           list.sort(compare('x'));
-          for(var i = 0; i < list.length;i++){
-            x_newdata.push(list[i]['x']);
-          }
+        }
+        else{
           for(var i = 0; i < y_number; i++){
-            var item = [];
-            for(var j = 0; j < list.length;j++){
-              item.push(list[j][i]);
-            }
-            y_newdata.push(item);
+            if(this.layout[this.currentId].option.series[i].name == this.y_axis_sort_Id) break;
           }
-          for(var i = 0; i < y_number; i++){
-            this.layout[this.currentId].option.series[i].data = y_newdata[i];
+          list.sort(compare(i));
+        }
+        for(var i = 0; i < list.length;i++){
+          x_newdata.push(list[i]['x']);
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var j = 0; j < list.length;j++){
+            item.push(list[j][i]);
           }
-          if(this.currentChartId == 2 || this.currentChartId == 7){
-            this.layout[this.currentId].option.yAxis.data = x_newdata;
-          }
-          else{
-            this.layout[this.currentId].option.xAxis.data = x_newdata;
-          }
+          y_newdata.push(item);
+        }
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
         }
       }
       if (e == "从大到小"){
-        if(this.data_sort == 'x轴'){
-          var xdata;
-          var ydata = [];
-          var x_newdata = [];
-          var y_newdata = [];
-          if(this.currentChartId == 2 || this.currentChartId == 7){
-            xdata = this.layout[this.currentId].option.yAxis.data;
+        var xdata;
+        var ydata = [];
+        var x_newdata = [];
+        var y_newdata = [];
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          xdata = this.layout[this.currentId].option.yAxis.data;
+        }
+        else{
+          xdata = this.layout[this.currentId].option.xAxis.data;
+        }
+        var y_number = this.layout[this.currentId].option.series.length;
+        for(var i = 0; i < y_number; i++){
+          ydata.push(this.layout[this.currentId].option.series[i].data);
+        }
+        var list = [];
+        for(var i = 0; i < xdata.length; i++){
+          var item = {};
+          item['x'] = xdata[i];
+          for(var j = 0; j < y_number;j++){
+            item[j] = ydata[j][i];
           }
-          else{
-            xdata = this.layout[this.currentId].option.xAxis.data;
+          list.push(item);
+        }
+        // 排序方法
+        function compare(property) {//property:根据什么属性排序
+          return function(a,b){
+            var value1 = a[property];
+            var value2 = b[property];
+            /*
+            * value2 - value1; ——> 降序
+            * value1 - value2; ——> 升序
+            */
+            return value2 - value1;//降序排序
           }
-          var y_number = this.layout[this.currentId].option.series.length;
-          for(var i = 0; i < y_number; i++){
-            ydata.push(this.layout[this.currentId].option.series[i].data);
-          }
-          var list = [];
-          for(var i = 0; i < xdata.length; i++){
-            var item = {};
-            item['x'] = xdata[i];
-            for(var j = 0; j < y_number;j++){
-              item[j] = ydata[j][i];
-            }
-            list.push(item);
-          }
-          // 排序方法
-          function compare(property) {//property:根据什么属性排序
-            return function(a,b){
-              var value1 = a[property];
-              var value2 = b[property];
-              /*
-              * value2 - value1; ——> 降序
-              * value1 - value2; ——> 升序
-              */
-              return value2 - value1;//升序排序
-            }
-          }
+        }
+        if(this.data_sort_type == 'x轴'){
           list.sort(compare('x'));
-          for(var i = 0; i < list.length;i++){
-            x_newdata.push(list[i]['x']);
-          }
+        }
+        else{
           for(var i = 0; i < y_number; i++){
-            var item = [];
-            for(var j = 0; j < list.length;j++){
-              item.push(list[j][i]);
-            }
-            y_newdata.push(item);
+            if(this.layout[this.currentId].option.series[i].name == this.y_axis_sort_Id) break;
           }
-          for(var i = 0; i < y_number; i++){
-            this.layout[this.currentId].option.series[i].data = y_newdata[i];
+          list.sort(compare(i));
+        }
+        for(var i = 0; i < list.length;i++){
+          x_newdata.push(list[i]['x']);
+        }
+        for(var i = 0; i < y_number; i++){
+          var item = [];
+          for(var j = 0; j < list.length;j++){
+            item.push(list[j][i]);
           }
-          if(this.currentChartId == 2 || this.currentChartId == 7){
-            this.layout[this.currentId].option.yAxis.data = x_newdata;
-          }
-          else{
-            this.layout[this.currentId].option.xAxis.data = x_newdata;
-          }
+          y_newdata.push(item);
+        }
+        for(var i = 0; i < y_number; i++){
+          this.layout[this.currentId].option.series[i].data = y_newdata[i];
+        }
+        if(this.currentChartId == 2 || this.currentChartId == 7){
+          this.layout[this.currentId].option.yAxis.data = x_newdata;
+        }
+        else{
+          this.layout[this.currentId].option.xAxis.data = x_newdata;
         }
       }
     },
