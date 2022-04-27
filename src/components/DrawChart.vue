@@ -1579,13 +1579,15 @@ export default {
           this.layout[this.currentId].option.series.push({});
           this.layout[this.currentId].option.series.push({});
           this.layout[this.currentId].option.legend.data.push(this.transferData[e[i]].label);
-          this.layout[this.currentId].option.series[i].name = this.transferData[e[i]].label;
-          this.layout[this.currentId].option.series[i].data = this.datatransform[this.transferData[e[i]].label];
-          this.layout[this.currentId].option.series[i].type = type;
+          //添加第一种图表
+          this.layout[this.currentId].option.series[2*i].name = this.transferData[e[i]].label;
+          this.layout[this.currentId].option.series[2*i].data = this.datatransform[this.transferData[e[i]].label];
+          this.layout[this.currentId].option.series[2*i].type = type1;
+          //添加第二种图表
+          this.layout[this.currentId].option.series[2*i].name = this.transferData[e[i]].label;
+          this.layout[this.currentId].option.series[2*i].data = this.datatransform[this.transferData[e[i]].label];
+          this.layout[this.currentId].option.series[2*i].type = type;
         }
-        this.$forceUpdate();
-        this.layout[this.currentId].option.series[0].data = this.datatransform[e];
-        this.layout[this.currentId].option.series[1].data = this.datatransform[e];
         this.$forceUpdate();
       }
       if (this.currentChartId == 7) { // 纵向混合图
