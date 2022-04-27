@@ -1351,7 +1351,7 @@ export default {
           [
             "100",
             "120",
-            "135",
+            "110",
             "2020-08-12T16:43:48.000+08:00",
             "5"
           ]
@@ -2028,6 +2028,8 @@ export default {
     },
     get_ysort_name: function(e){
       this.layout[this.currentId].y_axis_sort_name = e;
+      this.layout[this.currentId].data_sort_name = "";
+      this.data_sort_dir = "";
     },
     getsort: function (e) {
       this.layout[this.currentId].data_sort_name = e;
