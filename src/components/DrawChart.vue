@@ -278,7 +278,7 @@
               :class="{active:index==typeActive}"
             >
               <component
-                class="e-charts-light"
+                :class="style_now"
                 :is="'EChartComponent'" 
                 :uniqueId="item.i"
                 :echartOption="item.option"
@@ -328,6 +328,7 @@ export default {
   data() {
     return {
       data_sort_type:"",
+      style_now : "e-charts-light",
       styles : ['e-charts-light', 'e-charts-dark'],
       styleId : 0,
       currentId:0,
@@ -2177,20 +2178,22 @@ export default {
     changeTypeStyle:function(e) {
       console.log("点击样式：");
       if(this.data_model_theme == "浅色模式"){
-        Array.from(document.querySelectorAll('.' + this.styles[1])).forEach((el) => {
-          const style = this.styles[1]
-          el.classList.replace(style, this.styles[0])
-      })
+      //   Array.from(document.querySelectorAll('.' + this.styles[1])).forEach((el) => {
+      //     const style = this.styles[1]
+      //     el.classList.replace(style, this.styles[0])
+      // })
+        this.style_now = this.styles[0]
         this.font_color='#222222'
         for(var i = 0; i < this.layout.length; i++){
             this.changefont(i,this.font_color)
         }
       }
       else if(this.data_model_theme == "深色模式"){
-        Array.from(document.querySelectorAll('.' + this.styles[0])).forEach((el) => {
-          const style = this.styles[0]
-          el.classList.replace(style, this.styles[1])
-      })
+      //   Array.from(document.querySelectorAll('.' + this.styles[0])).forEach((el) => {
+      //     const style = this.styles[0]
+      //     el.classList.replace(style, this.styles[1])
+      // })
+        this.style_now = this.styles[1]
         this.font_color='#FFFFFF'
         for(var j = 0; j < this.layout.length; j++){
           this.changefont(j,this.font_color)
